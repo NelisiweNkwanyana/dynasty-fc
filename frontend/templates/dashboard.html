@@ -1,0 +1,2940 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <title>Dashboard - Dynasty Integrated System</title>
+    <link rel="stylesheet" href="/css/style.css" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
+    <style>
+        .login-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(6, 15, 31, 0.92);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 9999;
+            backdrop-filter: blur(8px);
+        }
+
+        .login-overlay .login-box {
+            background: #fff;
+            padding: 50px 45px 40px;
+            border-radius: 16px;
+            max-width: 420px;
+            width: 100%;
+            text-align: center;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.5);
+            animation: fadeIn 0.5s ease;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: scale(0.9) translateY(20px); }
+            to { opacity: 1; transform: scale(1) translateY(0); }
+        }
+
+        .login-box .lock-icon {
+            font-size: 48px;
+            color: #b8944a;
+            margin-bottom: 15px;
+        }
+
+        .login-box h2 {
+            font-size: 22px;
+            color: #0a1a33;
+            margin-bottom: 5px;
+        }
+
+        .login-box .login-subtitle {
+            font-size: 14px;
+            color: #888;
+            margin-bottom: 25px;
+        }
+
+        .login-box input {
+            width: 100%;
+            padding: 14px 18px;
+            border: 2px solid #e0e0e0;
+            border-radius: 10px;
+            font-size: 15px;
+            margin-bottom: 15px;
+            transition: border-color 0.3s;
+            box-sizing: border-box;
+        }
+
+        .login-box input:focus {
+            border-color: #b8944a;
+            outline: none;
+        }
+
+        .login-box .btn-login {
+            width: 100%;
+            padding: 14px;
+            background: #b8944a;
+            border: none;
+            border-radius: 10px;
+            font-size: 16px;
+            font-weight: 700;
+            color: #0a1a33;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .login-box .btn-login:hover {
+            background: #d4af6a;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 20px rgba(184,148,74,0.3);
+        }
+
+        .login-box .error-message {
+            color: #dc3545;
+            font-size: 14px;
+            margin-bottom: 15px;
+            display: none;
+            padding: 10px;
+            background: #f8d7da;
+            border-radius: 8px;
+        }
+
+        .login-box .error-message.show { display: block; }
+
+        .login-box .secure-badge {
+            margin-top: 15px;
+            font-size: 12px;
+            color: #888;
+        }
+
+        .login-box .secure-badge i { color: #28a745; }
+
+        .dashboard-container {
+            display: flex;
+            min-height: 100vh;
+            background: #f4f6f9;
+        }
+
+        .sidebar {
+            width: 260px;
+            background: #0a1a33;
+            color: #fff;
+            padding: 20px 0;
+            min-height: 100vh;
+            flex-shrink: 0;
+            position: sticky;
+            top: 0;
+            height: 100vh;
+            overflow-y: auto;
+        }
+
+        .sidebar .logo {
+            text-align: center;
+            padding: 0 20px 20px;
+            border-bottom: 1px solid rgba(255,255,255,0.05);
+        }
+
+        .sidebar .logo .football-icon {
+            font-size: 48px;
+            color: #fff;
+            display: block;
+            margin-bottom: 8px;
+        }
+
+        .sidebar .logo h2 {
+            font-size: 18px;
+            color: #fff;
+            font-weight: 700;
+        }
+
+        .sidebar .logo h2 span { color: #b8944a; }
+
+        .sidebar .logo .tagline {
+            font-size: 10px;
+            color: #888;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+        }
+
+        .sidebar .sidebar-menu {
+            list-style: none;
+            padding: 10px 0;
+        }
+
+        .sidebar .sidebar-menu li a {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 12px 20px;
+            color: #aaa;
+            text-decoration: none;
+            transition: all 0.3s;
+            font-size: 14px;
+            border-left: 3px solid transparent;
+        }
+
+        .sidebar .sidebar-menu li a:hover {
+            background: rgba(255,255,255,0.05);
+            color: #fff;
+        }
+
+        .sidebar .sidebar-menu li a.active {
+            background: rgba(184,148,74,0.08);
+            color: #d4af6a;
+            border-left-color: #b8944a;
+        }
+
+        .sidebar .sidebar-menu li a i {
+            width: 20px;
+            text-align: center;
+            font-size: 16px;
+        }
+
+        .sidebar .sidebar-menu li a .badge {
+            margin-left: auto;
+            background: #b8944a;
+            color: #0a1a33;
+            padding: 2px 8px;
+            border-radius: 12px;
+            font-size: 11px;
+            font-weight: 700;
+        }
+
+        .sidebar .sidebar-menu li a .badge.danger {
+            background: #dc3545;
+            color: #fff;
+        }
+
+        .sidebar .user-info {
+            padding: 20px;
+            border-top: 1px solid rgba(255,255,255,0.05);
+            margin-top: 10px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .sidebar .user-info .avatar {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: #b8944a;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #0a1a33;
+            font-weight: 700;
+            font-size: 18px;
+        }
+
+        .sidebar .user-info .user-details { flex: 1; }
+
+        .sidebar .user-info .user-details .name {
+            font-weight: 600;
+            font-size: 14px;
+            color: #fff;
+        }
+
+        .sidebar .user-info .user-details .role {
+            font-size: 12px;
+            color: #888;
+        }
+
+        .sidebar .user-info .logout-btn {
+            color: #aaa;
+            text-decoration: none;
+            padding: 5px 10px;
+            border-radius: 6px;
+            transition: all 0.3s;
+        }
+
+        .sidebar .user-info .logout-btn:hover {
+            background: rgba(255,255,255,0.05);
+            color: #d4af6a;
+        }
+
+        .main-content {
+            flex: 1;
+            padding: 30px;
+            overflow-y: auto;
+        }
+
+        .main-content .page-header { margin-bottom: 30px; }
+
+        .main-content .page-header h1 {
+            font-size: 28px;
+            color: #0a1a33;
+            border-left: 5px solid #b8944a;
+            padding-left: 15px;
+            font-weight: 700;
+        }
+
+        .main-content .page-header p {
+            color: #888;
+            margin-top: 5px;
+        }
+
+        .content-panel { display: none; }
+        .content-panel.active { display: block; }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+
+        .stat-card {
+            background: #fff;
+            padding: 20px;
+            border-radius: 12px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+            text-align: center;
+            border-left: 4px solid #b8944a;
+        }
+
+        .stat-card h3 {
+            font-size: 13px;
+            color: #888;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .stat-card .number {
+            font-size: 30px;
+            font-weight: 700;
+            color: #0a1a33;
+            margin-top: 5px;
+        }
+
+        .quick-access-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+            gap: 15px;
+            margin-top: 15px;
+        }
+
+        .quick-access-card {
+            background: #fff;
+            padding: 20px;
+            border-radius: 12px;
+            text-align: center;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+            cursor: pointer;
+            transition: all 0.3s;
+            text-decoration: none;
+            color: inherit;
+        }
+
+        .quick-access-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 25px rgba(0,0,0,0.1);
+        }
+
+        .quick-access-card i {
+            font-size: 28px;
+            color: #b8944a;
+            margin-bottom: 8px;
+        }
+
+        .quick-access-card h4 {
+            font-size: 14px;
+            color: #0a1a33;
+        }
+
+        .quick-access-card p {
+            font-size: 12px;
+            color: #888;
+            margin-top: 2px;
+        }
+
+        .table-container {
+            background: #fff;
+            border-radius: 12px;
+            padding: 20px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+            margin-bottom: 30px;
+            overflow-x: auto;
+        }
+
+        .table-container .table-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+            gap: 15px;
+            flex-wrap: wrap;
+        }
+
+        .table-container .table-header h2 {
+            font-size: 18px;
+            color: #0a1a33;
+        }
+
+        .table-container .table-header .btn-add {
+            background: #b8944a;
+            border: none;
+            padding: 8px 20px;
+            border-radius: 8px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+            color: #0a1a33;
+        }
+
+        .table-container .table-header .btn-add:hover {
+            background: #d4af6a;
+            transform: translateY(-2px);
+        }
+
+        .table-search {
+            position: relative;
+            margin-bottom: 15px;
+        }
+
+        .table-search i {
+            position: absolute;
+            left: 15px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: #b8944a;
+            font-size: 14px;
+            pointer-events: none;
+        }
+
+        .table-search input {
+            width: 100%;
+            padding: 11px 15px 11px 42px;
+            border: 2px solid #e8eaee;
+            border-radius: 10px;
+            font-size: 14px;
+            font-family: inherit;
+            background: #fafbfc;
+            transition: all 0.25s;
+            color: #0a1a33;
+        }
+
+        .table-search input:focus {
+            outline: none;
+            border-color: #b8944a;
+            background: #fff;
+            box-shadow: 0 0 0 4px rgba(184,148,74,0.12);
+        }
+
+        .table-search input::placeholder {
+            color: #a8b0bf;
+        }
+
+        .search-with-export {
+            display: flex;
+            gap: 12px;
+            align-items: stretch;
+            margin-bottom: 15px;
+        }
+
+        .search-with-export .table-search {
+            flex: 1;
+            margin-bottom: 0;
+        }
+
+        .btn-export-csv {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 11px 20px;
+            background: #0a1a33;
+            color: #d4af6a;
+            border: 2px solid #b8944a;
+            border-radius: 10px;
+            font-family: inherit;
+            font-size: 13px;
+            font-weight: 700;
+            cursor: pointer;
+            white-space: nowrap;
+            transition: all 0.25s;
+            letter-spacing: 0.5px;
+        }
+
+        .btn-export-csv:hover {
+            background: #b8944a;
+            color: #0a1a33;
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(184,148,74,0.35);
+        }
+
+        .btn-export-csv i {
+            font-size: 12px;
+        }
+
+        @media (max-width: 600px) {
+            .search-with-export {
+                flex-direction: column;
+            }
+            .btn-export-csv {
+                justify-content: center;
+            }
+        }
+
+        .no-results {
+            text-align: center;
+            padding: 25px;
+            color: #888;
+            font-size: 14px;
+            font-style: italic;
+        }
+
+        .charts-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+
+        .chart-card {
+            background: #fff;
+            border-radius: 12px;
+            padding: 22px 24px 20px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+            border-left: 4px solid #b8944a;
+        }
+
+        .chart-card .chart-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: baseline;
+            margin-bottom: 18px;
+        }
+
+        .chart-card .chart-header h3 {
+            font-size: 16px;
+            color: #0a1a33;
+            font-weight: 700;
+        }
+
+        .chart-card .chart-header .chart-sub {
+            font-size: 12px;
+            color: #888;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .chart-card .chart-body {
+            position: relative;
+            height: 240px;
+        }
+
+        .chart-card .chart-body canvas {
+            max-height: 240px;
+        }
+
+        .btn-broadcast {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 6px 14px;
+            background: #0a1a33;
+            color: #d4af6a;
+            border: 2px solid #b8944a;
+            border-radius: 6px;
+            font-family: inherit;
+            font-size: 12px;
+            font-weight: 700;
+            cursor: pointer;
+            white-space: nowrap;
+            transition: all 0.25s;
+            margin-right: 4px;
+        }
+
+        .btn-broadcast:hover {
+            background: #b8944a;
+            color: #0a1a33;
+            transform: translateY(-1px);
+            box-shadow: 0 4px 12px rgba(184,148,74,0.35);
+        }
+
+        .btn-broadcast:disabled {
+            background: #ccc;
+            color: #666;
+            border-color: #aaa;
+            cursor: not-allowed;
+            transform: none;
+            box-shadow: none;
+        }
+
+        .broadcast-info {
+            padding: 16px 20px;
+            background: #f8f6f1;
+            border-left: 4px solid #b8944a;
+            border-radius: 8px;
+            margin-bottom: 18px;
+            font-size: 14px;
+            color: #2a2a35;
+            line-height: 1.6;
+        }
+
+        .broadcast-info strong {
+            color: #0a1a33;
+            font-weight: 700;
+        }
+
+        .broadcast-info .recipient-count {
+            color: #b8944a;
+            font-size: 22px;
+            font-weight: 800;
+            display: block;
+            margin: 6px 0;
+        }
+
+        @media (max-width: 480px) {
+            .chart-card { padding: 18px 16px; }
+            .chart-card .chart-body { height: 200px; }
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        table th {
+            background: #f8f9fc;
+            padding: 12px 15px;
+            text-align: left;
+            font-size: 12px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            color: #888;
+            border-bottom: 2px solid #eee;
+        }
+
+        table td {
+            padding: 12px 15px;
+            border-bottom: 1px solid #eee;
+            font-size: 14px;
+            color: #0a1a33;
+            vertical-align: middle;
+        }
+
+        table tr:hover { background: #f8f9fc; }
+
+        table .status-badge {
+            padding: 3px 12px;
+            border-radius: 12px;
+            font-size: 12px;
+            font-weight: 600;
+        }
+
+        table .status-badge.read {
+            background: #d4edda;
+            color: #155724;
+        }
+
+        table .status-badge.unread {
+            background: #f8d7da;
+            color: #721c24;
+        }
+
+        table .status-badge.pending {
+            background: #fff3cd;
+            color: #856404;
+        }
+
+        table .status-badge.approved {
+            background: #d4edda;
+            color: #155724;
+        }
+
+        table .status-badge.rejected {
+            background: #f8d7da;
+            color: #721c24;
+        }
+
+        table .btn-action {
+            padding: 6px 12px;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 12px;
+            transition: all 0.3s;
+            margin-right: 4px;
+            white-space: nowrap;
+        }
+
+        table .btn-action.view {
+            background: #b8944a;
+            color: #0a1a33;
+        }
+
+        table .btn-action.view:hover { background: #d4af6a; }
+
+        table .btn-action.approve {
+            background: #28a745;
+            color: #fff;
+        }
+
+        table .btn-action.approve:hover { background: #218838; }
+
+        table .btn-action.reject {
+            background: #ffc107;
+            color: #0a1a33;
+        }
+
+        table .btn-action.reject:hover { background: #e0a800; }
+
+        table .btn-action.delete {
+            background: #dc3545;
+            color: #fff;
+        }
+
+        table .btn-action.delete:hover { background: #c82333; }
+
+        .gallery-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+            gap: 15px;
+            margin-top: 20px;
+        }
+
+        .gallery-item {
+            position: relative;
+            border-radius: 12px;
+            overflow: hidden;
+            background: #eee;
+            aspect-ratio: 4 / 3;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.08);
+        }
+
+        .gallery-item img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            display: block;
+        }
+
+        .gallery-item .gallery-info {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background: linear-gradient(to top, rgba(10,26,51,0.95), transparent);
+            padding: 15px;
+            color: #fff;
+        }
+
+        .gallery-item .gallery-info h4 {
+            font-size: 14px;
+            font-weight: 700;
+            margin-bottom: 3px;
+        }
+
+        .gallery-item .gallery-info p {
+            font-size: 12px;
+            color: #ccc;
+        }
+
+        .gallery-item .gallery-delete {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            background: rgba(220, 53, 69, 0.9);
+            color: #fff;
+            border: none;
+            padding: 8px 10px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 13px;
+            transition: all 0.3s;
+        }
+
+        .gallery-item .gallery-delete:hover {
+            background: #c82333;
+        }
+
+        .activity-item {
+            display: flex;
+            justify-content: space-between;
+            padding: 10px 0;
+            border-bottom: 1px solid #eee;
+            font-size: 14px;
+        }
+
+        .activity-item:last-child { border-bottom: none; }
+
+        .activity-item .time { color: #888; font-size: 12px; }
+
+        .modal-bg {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.7);
+            z-index: 9999;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .modal-box {
+            background: #fff;
+            padding: 30px;
+            border-radius: 12px;
+            max-width: 500px;
+            width: 100%;
+            max-height: 90vh;
+            overflow-y: auto;
+        }
+
+        .modal-box h2 { margin-bottom: 20px; color: #0a1a33; }
+
+        .modal-box input,
+        .modal-box textarea,
+        .modal-box select {
+            width: 100%;
+            padding: 12px;
+            margin-bottom: 12px;
+            border: 2px solid #ddd;
+            border-radius: 8px;
+            font-size: 14px;
+            font-family: inherit;
+        }
+
+        .modal-box input:focus,
+        .modal-box textarea:focus,
+        .modal-box select:focus {
+            border-color: #b8944a;
+            outline: none;
+        }
+
+        .modal-box .btn-submit {
+            background: #b8944a;
+            border: none;
+            padding: 12px;
+            border-radius: 8px;
+            font-weight: 700;
+            width: 100%;
+            cursor: pointer;
+            font-size: 15px;
+            color: #0a1a33;
+        }
+
+        .modal-box .btn-submit:hover { background: #d4af6a; }
+
+        .modal-box .btn-cancel {
+            margin-top: 10px;
+            background: #dc3545;
+            color: #fff;
+            border: none;
+            padding: 10px;
+            border-radius: 8px;
+            width: 100%;
+            cursor: pointer;
+        }
+
+        .modal-box .btn-cancel:hover { background: #c82333; }
+
+        @media (max-width: 768px) {
+            .dashboard-container { flex-direction: column; }
+
+            .sidebar {
+                width: 100%;
+                height: auto;
+                min-height: unset;
+                position: relative;
+            }
+
+            .main-content { padding: 20px; }
+
+            .stats-grid { grid-template-columns: repeat(2, 1fr); }
+            .quick-access-grid { grid-template-columns: repeat(2, 1fr); }
+            .gallery-grid { grid-template-columns: repeat(2, 1fr); }
+            .table-container { padding: 15px; }
+        }
+
+        @media (max-width: 480px) {
+            .stats-grid { grid-template-columns: 1fr; }
+            .quick-access-grid { grid-template-columns: 1fr; }
+            .gallery-grid { grid-template-columns: 1fr; }
+            .sidebar .sidebar-menu li a { font-size: 13px; padding: 10px 15px; }
+            .main-content .page-header h1 { font-size: 22px; }
+            .login-box { padding: 30px 20px; margin: 15px; }
+        }
+    </style>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@500;600;700;800&family=Manrope:wght@400;500;600;700;800&display=swap">
+    <link rel="stylesheet" href="/css/dashboard-modern.css">
+    <link rel="stylesheet" href="/css/modules.css">
+</head>
+<body>
+
+    <div class="login-overlay" id="loginOverlay">
+        <div class="login-box">
+            <div class="lock-icon"><i class="fas fa-lock"></i></div>
+            <h2>Staff Login</h2>
+            <p class="login-subtitle">Secure access to Dynasty Integrated System</p>
+
+            <div id="errorMessage" class="error-message">Invalid email or password</div>
+
+            <form id="staffLoginForm" onsubmit="handleStaffLogin(event)">
+                <input type="email" id="overlayEmail" placeholder="Email Address" required />
+                <input type="password" id="overlayPassword" placeholder="Password" required />
+                <button type="submit" class="btn-login"><i class="fas fa-key"></i> Login</button>
+            </form>
+
+            <div class="secure-badge">
+                <i class="fas fa-shield-alt"></i> Encrypted &bull; Secure &bull; Staff Only
+            </div>
+        </div>
+    </div>
+
+    <div id="dashboardContent" style="display:none;">
+        <header class="mobile-bar">
+            <span class="football-icon"><i class="fas fa-crown"></i></span>
+            <b>Dynasty <span>FC</span></b>
+            <button type="button" data-open-cmdk aria-label="Search"><i class="fas fa-magnifying-glass"></i></button>
+            <button type="button" id="mobileMenuBtn" aria-label="Open menu"><i class="fas fa-bars"></i></button>
+        </header>
+        <div class="sidebar-scrim"></div>
+        <div class="dashboard-container">
+
+            <aside class="sidebar">
+                <div class="logo">
+                    <span class="football-icon"><i class="fas fa-crown"></i></span>
+                    <div class="logo-text"><h2>Dynasty <span>FC</span></h2><span class="tagline">Integrated System</span></div>
+                </div>
+
+                <button class="cmd-trigger" type="button" data-open-cmdk><i class="fas fa-magnifying-glass"></i> Search or jump to… <kbd>Ctrl K</kbd></button>
+                <button class="bell" type="button" id="bellBtn"><i class="fas fa-bell"></i> Notifications <span class="cnt zero" id="bellCount">0</span></button>
+
+                <ul class="sidebar-menu">
+                    <li class="menu-label">Overview</li>
+                    <li><a href="#" class="active" data-panel="dashboard" onclick="showPanel('dashboard', this); return false;"><i class="fas fa-chart-pie"></i> Dashboard</a></li>
+                    <li><a href="#" data-panel="development" onclick="showPanel('development', this); return false;"><i class="fas fa-ranking-star"></i> Player Development <span class="badge new">NEW</span></a></li>
+                    <li data-cap="documents"><a href="#" data-panel="tasks" onclick="showPanel('tasks', this); return false;"><i class="fas fa-list-check"></i> Tasks <span class="badge danger" id="taskBadge" style="display:none">0</span></a></li>
+                    <li data-cap="documents"><a href="#" data-panel="analytics" onclick="showPanel('analytics', this); return false;"><i class="fas fa-chart-area"></i> Analytics</a></li>
+                    <li class="menu-label">Squad</li>
+                    <li><a href="#" data-panel="players" onclick="showPanel('players', this); return false;"><i class="fas fa-users"></i> Players</a></li>
+                    <li><a href="#" data-panel="matches" onclick="showPanel('matches', this); return false;"><i class="fas fa-calendar-alt"></i> Matches</a></li>
+                    <li data-cap="predictions"><a href="#" data-panel="ml" onclick="showPanel('ml', this); return false;"><i class="fas fa-brain"></i> Match Intelligence</a></li>
+                    <li data-cap="staff"><a href="#" data-panel="predictions" onclick="showPanel('predictions', this); return false;"><i class="fas fa-chart-line"></i> Fan Predictions</a></li>
+                    <li data-cap="staff"><a href="#" data-panel="staff" onclick="showPanel('staff', this); return false;"><i class="fas fa-user-tie"></i> Staff</a></li>
+                    <li class="menu-label">Community</li>
+                    <li data-cap="staff"><a href="#" data-panel="messages" onclick="showPanel('messages', this); return false;"><i class="fas fa-envelope"></i> Messages <span class="badge danger" id="unreadBadge">0</span></a></li>
+                    <li data-cap="staff"><a href="#" data-panel="volunteers" onclick="showPanel('volunteers', this); return false;"><i class="fas fa-hand-holding-heart"></i> Volunteers</a></li>
+                    <li data-cap="staff"><a href="#" data-panel="newsletters" onclick="showPanel('newsletters', this); return false;"><i class="fas fa-newspaper"></i> Newsletters</a></li>
+                    <li data-cap="staff"><a href="#" data-panel="testimonials" onclick="showPanel('testimonials', this); return false;"><i class="fas fa-quote-left"></i> Testimonials <span class="badge danger" id="pendingTestimonialsBadge">0</span></a></li>
+                    <li data-cap="staff"><a href="#" data-panel="gallery" onclick="showPanel('gallery', this); return false;"><i class="fas fa-images"></i> Gallery</a></li>
+                    <li class="menu-label">Operations</li>
+                    <li data-cap="documents"><a href="#" data-panel="documents" onclick="showPanel('documents', this); return false;"><i class="fas fa-file-circle-check"></i> Documents</a></li>
+                    <li data-cap="finance"><a href="#" data-panel="finance" onclick="showPanel('finance', this); return false;"><i class="fas fa-money-bill-wave"></i> Finance</a></li>
+                    <li data-cap="staff"><a href="#" data-panel="inventory" onclick="showPanel('inventory', this); return false;"><i class="fas fa-boxes"></i> Inventory</a></li>
+                    <li class="menu-label">Administration</li>
+                    <li data-cap="admin"><a href="#" data-panel="users" onclick="showPanel('users', this); return false;"><i class="fas fa-user-shield"></i> User Accounts</a></li>
+                    <li data-cap="documents"><a href="#" data-panel="audit" onclick="showPanel('audit', this); return false;"><i class="fas fa-shield-halved"></i> Audit &amp; Automation</a></li>
+                </ul>
+
+                <div class="user-info">
+                    <div class="avatar">A</div>
+                    <div class="user-details">
+                        <div class="name" id="userName">Admin</div>
+                        <div class="role" id="userRole">System Administrator</div>
+                    </div>
+                    <a href="#" class="logout-btn" title="Change password" aria-label="Change password" onclick="V4.changePassword(); return false;" style="margin-right:6px"><i class="fas fa-key"></i></a>
+                    <a href="#" class="logout-btn" title="Log out" aria-label="Log out" onclick="logout(); return false;"><i class="fas fa-sign-out-alt"></i></a>
+                </div>
+            </aside>
+            <div class="notif-panel" id="notifPanel" aria-live="polite"></div>
+
+            <main class="main-content">
+                <div class="sec-banner" id="weakPwBanner" hidden><i class="fas fa-triangle-exclamation"></i>
+                    <span>Your password is weak or still the default. Anyone who guesses it can see player and finance records.</span>
+                    <button type="button" class="btn-gold" onclick="V4.changePassword()">Change it now</button></div>
+
+                <div id="panel-dashboard" class="content-panel active">
+                    <section class="home-hero">
+                        <div style="position:relative;z-index:1">
+                            <div class="eyebrow">Executive dashboard</div>
+                            <h1><span id="heroGreeting">Welcome</span>, <span id="heroName" style="color:#f0cf86">Admin</span></h1>
+                            <p>Live view of your squads, player development, fixtures and club operations.</p>
+                        </div>
+                        <div class="hero-meta">
+                            <div class="clock" id="heroClock">--:--</div>
+                            <div class="date" id="heroDate"></div>
+                            <div class="hero-actions">
+                                <button class="btn-glass" type="button" data-open-cmdk><i class="fas fa-magnifying-glass"></i> Quick search</button>
+                                <button class="btn-gold" type="button" onclick="showPanel('development')"><i class="fas fa-ranking-star"></i> Player Development</button>
+                            </div>
+                        </div>
+                    </section>
+
+                    <div class="pulse" id="opsPulse"></div>
+
+                    <div class="spotlight" id="homeSpotlight">
+                        <div class="skeleton" style="aspect-ratio:auto;height:200px"></div>
+                        <div class="skeleton" style="aspect-ratio:auto;height:200px"></div>
+                        <div class="skeleton" style="aspect-ratio:auto;height:200px"></div>
+                    </div>
+
+                    <div class="stats-grid" id="statsGrid">
+                        <div class="stat-card"><h3><i class="fas fa-users"></i> Players</h3><div class="number" id="statPlayers">0</div></div>
+                        <div class="stat-card" data-cap="staff"><h3><i class="fas fa-envelope"></i> Messages</h3><div class="number" id="statMessages">0</div></div>
+                        <div class="stat-card" data-cap="staff"><h3><i class="fas fa-hand-holding-heart"></i> Volunteers</h3><div class="number" id="statVolunteers">0</div></div>
+                        <div class="stat-card" data-cap="staff"><h3><i class="fas fa-images"></i> Photos</h3><div class="number" id="statPhotos">0</div></div>
+                    </div>
+
+                    <h2 style="font-size:18px; margin-bottom:15px; color:#0a1a33;">Quick Access</h2>
+                    <div class="quick-access-grid">
+                        <div class="quick-access-card featured" onclick="showPanel('development')">
+                            <i class="fas fa-ranking-star"></i>
+                            <h4>Player Development</h4>
+                            <p>Ratings, progress &amp; insights</p>
+                        </div>
+                        <div class="quick-access-card" onclick="showPanel('players')">
+                            <i class="fas fa-users"></i>
+                            <h4>Players</h4>
+                            <p>Manage player profiles</p>
+                        </div>
+                        <div class="quick-access-card" onclick="showPanel('staff')">
+                            <i class="fas fa-user-tie"></i>
+                            <h4>Staff</h4>
+                            <p>Manage staff records</p>
+                        </div>
+                        <div class="quick-access-card" onclick="showPanel('gallery')">
+                            <i class="fas fa-images"></i>
+                            <h4>Gallery</h4>
+                            <p>Upload team photos</p>
+                        </div>
+                    </div>
+
+                    <div class="charts-grid" style="margin-top:30px;">
+                        <div class="chart-card">
+                            <div class="chart-header">
+                                <h3>Messages Over Time</h3>
+                                <span class="chart-sub">Last 6 months</span>
+                            </div>
+                            <div class="chart-body">
+                                <canvas id="messagesChart"></canvas>
+                            </div>
+                        </div>
+
+                        <div class="chart-card">
+                            <div class="chart-header">
+                                <h3>Volunteer Applications</h3>
+                                <span class="chart-sub">Last 6 months</span>
+                            </div>
+                            <div class="chart-body">
+                                <canvas id="volunteersChart"></canvas>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="table-container" style="margin-top:30px;">
+                        <h2 style="margin-bottom:15px;">Recent Activity</h2>
+                        <div id="recentActivity">
+                            <div class="activity-item"><span>Loading activity...</span><span class="time">Just now</span></div>
+                        </div>
+                    </div>
+                </div>
+
+                <div id="panel-development" class="content-panel">
+                    <div class="pdi-head">
+                        <div>
+                            <h1>Player Development <em>Intelligence</em></h1>
+                            <p>Ratings, progression and training attendance for every player — record an assessment and the whole squad view updates.</p>
+                            <div class="chips" id="pdiChips"></div>
+                        </div>
+                        <button class="btn-ghost" id="pdiCompareBtn" type="button"><i class="fas fa-code-compare"></i> Compare players</button>
+                    </div>
+
+                    <div class="kpis" id="pdiKpis"></div>
+
+                    <div class="pdi-toolbar">
+                        <div class="seg" id="pdiTeams" role="tablist" aria-label="Team">
+                            <button class="on" data-team="">All squads</button>
+                            <button data-team="Dynamights">Dynamights</button>
+                            <button data-team="Diamond Divas">Diamond Divas</button>
+                        </div>
+                        <div class="pdi-search"><i class="fas fa-magnifying-glass"></i><input id="pdiSearch" type="search" placeholder="Search name, position or number" aria-label="Search players"></div>
+                        <select id="pdiSort" class="pdi-select" aria-label="Sort players">
+                            <option value="overall">Sort: Overall rating</option>
+                            <option value="improved">Sort: Most improved</option>
+                            <option value="goals">Sort: Goals</option>
+                            <option value="attendance">Sort: Attendance</option>
+                            <option value="number">Sort: Shirt number</option>
+                            <option value="name">Sort: Name</option>
+                        </select>
+                        <span class="spacer"></span>
+                        <span id="pdiCount" style="font-size:13px;color:#6b778c;font-weight:600"></span>
+                    </div>
+
+                    <div class="pdi-layout">
+                        <div>
+                            <div class="squad-grid" id="pdiGrid"></div>
+                            <div class="compare-bar">
+                                <i class="fas fa-code-compare" style="color:#f0cf86"></i>
+                                <div class="slots" id="pdiCompareSlots"></div>
+                                <button class="btn-gold" id="pdiCompareGo" type="button" disabled>Compare</button>
+                                <button class="btn-glass" id="pdiCompareCancel" type="button">Cancel</button>
+                            </div>
+                        </div>
+                        <aside class="side-stack" id="pdiInsights"></aside>
+                    </div>
+                </div>
+
+                <div id="panel-documents" class="content-panel">
+                    <div class="mod-head">
+                        <div><h1>Smart <em>Document Centre</em></h1>
+                            <p>Upload invoices, receipts, bank statements, registration, consent and medical forms once. The system reads them (OCR for scans and photos), works out what they are, pulls out the details, checks them and – once you approve – sends the data where it belongs.</p></div>
+                        <div class="mod-actions" id="ocrNote"></div>
+                    </div>
+                    <div class="drop" id="docDrop"><i class="fas fa-cloud-arrow-up"></i><b>Drop documents here or click to choose</b>
+                        <small>PDF, photos (JPG/PNG), Word, Excel or CSV · up to 20 files at once</small>
+                        <input type="file" multiple accept=".pdf,.png,.jpg,.jpeg,.webp,.tif,.tiff,.docx,.xlsx,.csv,.txt" hidden></div>
+                    <div class="inline-form" style="margin:10px 0 18px"><label for="docForceType" style="font-size:13px;color:#6b778c">Document type:</label>
+                        <select id="docForceType"><option value="">Detect automatically</option><option value="invoice">Invoice</option><option value="receipt">Receipt</option><option value="bank_statement">Bank statement</option><option value="player_registration">Player registration</option><option value="medical_certificate">Medical certificate</option><option value="consent_form">Consent form</option><option value="contract">Contract / agreement</option></select></div>
+                    <div class="tabs2" id="docTabs" style="margin-bottom:14px"></div>
+                    <div id="docList"><div class="empty-state">Loading…</div></div>
+                </div>
+
+                <div id="panel-ml" class="content-panel">
+                    <div class="mod-head">
+                        <div><h1>Match <em>Intelligence</em></h1>
+                            <p>A machine-learning model trained on real historical results predicts each Dynasty fixture from team ratings, recent form and goal records. It is tested on matches it never saw, graded after every result and retrained on demand.</p></div>
+                    </div>
+                    <div id="mlBody"><div class="empty-state">Loading…</div></div>
+                </div>
+
+                <div id="panel-tasks" class="content-panel">
+                    <div class="mod-head">
+                        <div><h1>Follow-up <em>Tasks</em></h1>
+                            <p>Created automatically when something needs a person – a document to check, a flagged bank line, a new player's first assessment, an injury, a result not yet recorded, a contract nearing its end – and closed automatically once it is dealt with. You can add your own too.</p></div>
+                        <div class="mod-actions"><button class="btn-gold" type="button" onclick="V4.addTask()"><i class="fas fa-plus"></i> Add task</button></div>
+                    </div>
+                    <div class="tabs2" id="taskTabs" style="margin-bottom:14px"><button data-s="open" class="on">Open</button><button data-s="done">Done</button></div>
+                    <div id="taskBody"><div class="empty-state">Loading…</div></div>
+                </div>
+
+                <div id="panel-analytics" class="content-panel">
+                    <div class="mod-head">
+                        <div><h1>Club <em>Analytics</em></h1>
+                            <p>Trends worked out from your own records each time you open this page – results, player development, document turnaround, money and how the prediction model is doing. Sections you don't have access to are left out.</p></div>
+                    </div>
+                    <div id="anaBody"><div class="empty-state">Loading…</div></div>
+                </div>
+
+                <div id="panel-users" class="content-panel">
+                    <div class="mod-head">
+                        <div><h1>User <em>Accounts</em></h1>
+                            <p>Who can sign in and what they can see. Coaches get squads, fixtures, development and medical paperwork, but not finance or admin. New accounts get a one-time temporary password to pass on.</p></div>
+                        <div class="mod-actions"><button class="btn-gold" type="button" onclick="V4.addUser()"><i class="fas fa-user-plus"></i> New account</button></div>
+                    </div>
+                    <div id="usersBody"><div class="empty-state">Loading…</div></div>
+                </div>
+
+                <div id="panel-audit" class="content-panel">
+                    <div class="mod-head">
+                        <div><h1>Audit &amp; <em>Automation</em></h1>
+                            <p>How the modules work together, and a record of every upload, approval, sync and change.</p></div>
+                    </div>
+                    <div id="auditBody"><div class="empty-state">Loading…</div></div>
+                </div>
+
+                <div id="panel-messages" class="content-panel">
+                    <div class="page-header">
+                        <h1>Messages</h1>
+                        <p>View and manage messages from the contact form.</p>
+                    </div>
+                    <div class="table-container">
+                        <h2>All Messages</h2>
+                        <div class="table-search">
+                            <i class="fas fa-search"></i>
+                            <input type="text" placeholder="Search by name, email, subject or message..." oninput="filterTable('messagesTableBody', this.value)">
+                        </div>
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>From</th>
+                                    <th>Subject</th>
+                                    <th>Message</th>
+                                    <th>Date</th>
+                                    <th>Status</th>
+                                    <th>Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody id="messagesTableBody">
+                                <tr><td colspan="6" style="text-align:center;color:#888;">Loading messages...</td></tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <div id="panel-volunteers" class="content-panel">
+                    <div class="page-header">
+                        <h1>Volunteers</h1>
+                        <p>View and manage volunteer applications.</p>
+                    </div>
+                    <div class="table-container">
+                        <h2>All Applications</h2>
+                        <div class="table-search">
+                            <i class="fas fa-search"></i>
+                            <input type="text" placeholder="Search by name, email, role or availability..." oninput="filterTable('volunteersTableBody', this.value)">
+                        </div>
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>Name</th>
+                                    <th>Email</th>
+                                    <th>Role</th>
+                                    <th>Availability</th>
+                                    <th>Date</th>
+                                    <th>Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody id="volunteersTableBody">
+                                <tr><td colspan="6" style="text-align:center;color:#888;">Loading volunteers...</td></tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <div id="panel-newsletters" class="content-panel">
+                    <div class="page-header">
+                        <h1>Newsletters</h1>
+                        <p>Create and manage newsletters that appear on the News & Updates page.</p>
+                    </div>
+                    <div class="table-container">
+                        <div class="table-header">
+                            <h2>All Newsletters</h2>
+                            <button class="btn-add" onclick="openNewsletterModal()"><i class="fas fa-plus"></i> Add Newsletter</button>
+                        </div>
+                        <div class="table-search">
+                            <i class="fas fa-search"></i>
+                            <input type="text" placeholder="Search by title or content..." oninput="filterTable('newslettersTableBody', this.value)">
+                        </div>
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>Title</th>
+                                    <th>Content</th>
+                                    <th>Published</th>
+                                    <th>Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody id="newslettersTableBody">
+                                <tr><td colspan="4" style="text-align:center;color:#888;">Loading newsletters...</td></tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <div id="panel-testimonials" class="content-panel">
+                    <div class="page-header">
+                        <h1>Testimonials</h1>
+                        <p>Approve or reject testimonials submitted by the community.</p>
+                    </div>
+
+                    <div class="table-container" style="margin-bottom:20px;">
+                        <div class="table-header">
+                            <h2>Pending Approval</h2>
+                        </div>
+                        <div class="table-search">
+                            <i class="fas fa-search"></i>
+                            <input type="text" placeholder="Search pending testimonials..." oninput="filterTable('pendingTestimonialsBody', this.value)">
+                        </div>
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>Name</th>
+                                    <th>Role</th>
+                                    <th>Testimonial</th>
+                                    <th>Date</th>
+                                    <th>Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody id="pendingTestimonialsBody">
+                                <tr><td colspan="5" style="text-align:center;color:#888;">Loading...</td></tr>
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <div class="table-container">
+                        <div class="table-header">
+                            <h2>Approved Testimonials</h2>
+                        </div>
+                        <div class="table-search">
+                            <i class="fas fa-search"></i>
+                            <input type="text" placeholder="Search approved testimonials..." oninput="filterTable('approvedTestimonialsBody', this.value)">
+                        </div>
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>Name</th>
+                                    <th>Role</th>
+                                    <th>Testimonial</th>
+                                    <th>Approved</th>
+                                    <th>Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody id="approvedTestimonialsBody">
+                                <tr><td colspan="5" style="text-align:center;color:#888;">Loading...</td></tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <div id="panel-gallery" class="content-panel">
+                    <div class="page-header">
+                        <h1>Gallery</h1>
+                        <p>Upload and manage team photos that appear on the public gallery page.</p>
+                    </div>
+                    <div class="table-container">
+                        <div class="table-header">
+                            <h2>All Photos</h2>
+                            <button class="btn-add" onclick="openGalleryModal()"><i class="fas fa-plus"></i> Upload Photo</button>
+                        </div>
+                        <div class="gallery-grid" id="galleryGrid">
+                            <p style="text-align:center;color:#888;grid-column:1/-1;">Loading photos...</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div id="panel-matches" class="content-panel">
+                    <div class="page-header">
+                        <h1>Matches</h1>
+                        <p>Manage upcoming matches and results.</p>
+                    </div>
+                    <div class="table-container">
+                        <div class="table-header">
+                            <h2>All Matches</h2>
+                            <button class="btn-add" onclick="openMatchModal()"><i class="fas fa-plus"></i> Add Match</button>
+                        </div>
+                        <div class="table-search">
+                            <i class="fas fa-search"></i>
+                            <input type="text" placeholder="Search by team, venue or date..." oninput="filterTable('matchesTableBody', this.value)">
+                        </div>
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>Team</th>
+                                    <th>Home</th>
+                                    <th>Away</th>
+                                    <th>Date</th>
+                                    <th>Venue</th>
+                                    <th>Result</th>
+                                    <th>Status</th>
+                                    <th>Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody id="matchesTableBody">
+                                <tr><td colspan="8" style="text-align:center;color:#888;">Loading matches...</td></tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <div id="panel-predictions" class="content-panel">
+                    <div class="page-header">
+                        <h1>Match Predictions</h1>
+                        <p>View all user predictions for upcoming matches.</p>
+                    </div>
+                    <div class="table-container">
+                        <h2>All Predictions</h2>
+                        <div class="table-search">
+                            <i class="fas fa-search"></i>
+                            <input type="text" placeholder="Search by user or match..." oninput="filterTable('predictionsTableBody', this.value)">
+                        </div>
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>User</th>
+                                    <th>Match</th>
+                                    <th>Predicted Score</th>
+                                    <th>Actual Score</th>
+                                    <th>Points</th>
+                                    <th>Date</th>
+                                </tr>
+                            </thead>
+                            <tbody id="predictionsTableBody">
+                                <tr><td colspan="6" style="text-align:center;color:#888;">Loading predictions...</td></tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <div id="panel-players" class="content-panel">
+                    <div class="page-header">
+                        <h1>Players</h1>
+                        <p>Manage all players across Dynamights and Diamond Divas.</p>
+                    </div>
+                    <div class="table-container">
+                        <div class="table-header">
+                            <h2>All Players</h2>
+                            <button class="btn-add" onclick="openPlayerModal()"><i class="fas fa-plus"></i> Add Player</button>
+                        </div>
+                        <div class="table-search">
+                            <i class="fas fa-search"></i>
+                            <input type="text" placeholder="Search by name, position or team..." oninput="filterTable('playersTableBody', this.value)">
+                        </div>
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>Name</th>
+                                    <th>Position</th>
+                                    <th>Team</th>
+                                    <th>Age Group</th>
+                                    <th>Number</th>
+                                    <th>Status</th>
+                                    <th>Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody id="playersTableBody">
+                                <tr><td colspan="7" style="text-align:center;color:#888;">Loading players...</td></tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <div id="panel-staff" class="content-panel">
+                    <div class="page-header">
+                        <h1>Staff</h1>
+                        <p>Manage all staff members.</p>
+                    </div>
+                    <div class="table-container">
+                        <div class="table-header">
+                            <h2>All Staff</h2>
+                            <button class="btn-add" onclick="openStaffModal()"><i class="fas fa-plus"></i> Add Staff</button>
+                        </div>
+                        <div class="table-search">
+                            <i class="fas fa-search"></i>
+                            <input type="text" placeholder="Search by name, role or email..." oninput="filterTable('staffTableBody', this.value)">
+                        </div>
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>Name</th>
+                                    <th>Role</th>
+                                    <th>Status</th>
+                                    <th>Email</th>
+                                    <th>Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody id="staffTableBody">
+                                <tr><td colspan="5" style="text-align:center;color:#888;">Loading staff...</td></tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <div id="panel-finance" class="content-panel">
+                    <div class="mod-head" id="finPanel">
+                        <div><h1>Finance <em>&amp; Accounting</em></h1>
+                            <p>Bank exports, approved invoices/receipts and paid donations flow into one ledger. Every line is validated, checked for duplicates and categorised; nothing counts until a finance approver signs it off, after which it is posted to ERPNext.</p></div>
+                    </div>
+                    <div class="mod-grid c4" id="finTiles"></div>
+                    <div class="mod-grid c3 mt">
+                        <div class="box"><h3><span><i class="fas fa-chart-column"></i>Last 6 months</span><span class="legend2"><span><i style="background:#1f9d6b"></i>In</span><span><i style="background:#d64545"></i>Out</span></span></h3><div id="finChart"></div></div>
+                        <div class="box"><h3><span><i class="fas fa-tags"></i>Spending this month</span></h3><div id="finCats"></div></div>
+                        <div class="box"><h3><span><i class="fas fa-piggy-bank"></i>Monthly budgets</span></h3><div id="finBudgets"></div></div>
+                    </div>
+                    <div class="box mt" id="finAcct"></div>
+                    <div class="box mt">
+                        <div class="tabs2" id="finTabs" style="margin-bottom:14px"><button data-t="ledger" class="on">Ledger</button><button data-t="imports">Import bank / Excel</button><button data-t="manual">Manual entry</button></div>
+                        <div id="finBody"></div>
+                    </div>
+                    <h2 style="font-size:16px;margin:26px 0 10px;color:#6b778c">Existing monthly summary (from your original finance view)</h2>
+                    <div class="table-container">
+                        <h2>All Transactions</h2>
+                        <div class="table-search">
+                            <i class="fas fa-search"></i>
+                            <input type="text" placeholder="Search by month, description or category..." oninput="filterTable('financeTableBody', this.value)">
+                        </div>
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>Date</th>
+                                    <th>Description</th>
+                                    <th>Amount</th>
+                                    <th>Category</th>
+                                </tr>
+                            </thead>
+                            <tbody id="financeTableBody">
+                                <tr><td colspan="4" style="text-align:center;color:#888;">Loading transactions...</td></tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <div id="panel-inventory" class="content-panel">
+                    <div class="page-header">
+                        <h1>Inventory</h1>
+                        <p>Track all club assets and equipment.</p>
+                    </div>
+                    <div class="table-container">
+                        <div class="table-header">
+                            <h2>All Items</h2>
+                            <button class="btn-add" onclick="openInventoryModal()"><i class="fas fa-plus"></i> Add Item</button>
+                        </div>
+                        <div class="table-search">
+                            <i class="fas fa-search"></i>
+                            <input type="text" placeholder="Search by item, category, condition or location..." oninput="filterTable('inventoryTableBody', this.value)">
+                        </div>
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>Item</th>
+                                    <th>Category</th>
+                                    <th>Quantity</th>
+                                    <th>Condition</th>
+                                    <th>Location</th>
+                                    <th>Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody id="inventoryTableBody">
+                                <tr><td colspan="6" style="text-align:center;color:#888;">Loading inventory...</td></tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+            </main>
+        </div>
+
+        <footer class="footer" style="background:#0a1a33; color:#fff; padding:25px 0 20px; text-align:center; border-top:1px solid rgba(255,255,255,0.05);">
+            <div class="container">
+                <div style="color:#888; font-size:14px; line-height:1.8; margin-bottom:10px;">
+                    <strong style="color:#fff;">Fiat Grounds, Soweto</strong> • Johannesburg, South Africa<br />
+                    <a href="tel:+27639111277" style="color:#aaa; text-decoration:none;">+27 63 911 1277</a> •
+                    <a href="mailto:dynastyfcadmin@gmail.com" style="color:#aaa; text-decoration:none;">dynastyfcadmin@gmail.com</a> •
+                    <a href="https://www.instagram.com/dynastyfc_2016" target="_blank" style="color:#aaa; text-decoration:none;">Instagram</a>
+                </div>
+                <p style="color:#666; font-size:13px;">&copy; 2026 Dynasty Football Club. All rights reserved.</p>
+            </div>
+        </footer>
+    </div>
+
+    <div id="newsletterModal" class="modal-bg">
+        <div class="modal-box">
+            <h2>Add Newsletter</h2>
+            <form onsubmit="createNewsletter(event)">
+                <input type="text" id="newsletterTitle" placeholder="Title" required />
+                <textarea id="newsletterContent" placeholder="Content" rows="5" required></textarea>
+                <input type="url" id="newsletterImage" placeholder="Image URL (optional)" />
+                <button type="submit" class="btn-submit">Publish Newsletter</button>
+                <button type="button" onclick="closeModal('newsletterModal')" class="btn-cancel">Cancel</button>
+            </form>
+        </div>
+    </div>
+
+    <div id="broadcastModal" class="modal-bg">
+        <div class="modal-box">
+            <h2>Broadcast Newsletter</h2>
+
+            <div class="broadcast-info">
+                <div>You are about to email <strong>every registered user</strong> in the system.</div>
+                <span class="recipient-count" id="broadcastCount">...</span>
+                <div id="broadcastNewsletterTitle" style="font-style:italic;">—</div>
+            </div>
+
+            <p style="font-size:13px;color:#888;margin-bottom:20px;">
+                This cannot be undone. Staff and admins will not receive this email.
+            </p>
+
+            <button type="button" class="btn-submit" id="broadcastConfirmBtn" onclick="confirmBroadcast()">
+                <i class="fas fa-paper-plane"></i> Send to All Users
+            </button>
+            <button type="button" onclick="closeModal('broadcastModal')" class="btn-cancel">Cancel</button>
+        </div>
+    </div>
+
+    <div id="galleryModal" class="modal-bg">
+        <div class="modal-box">
+            <h2>Upload Photo</h2>
+            <form onsubmit="uploadGalleryPhoto(event)">
+                <input type="file" id="galleryFile" accept="image/*" required />
+                <input type="text" id="galleryTitle" placeholder="Title (optional)" />
+                <textarea id="galleryCaption" placeholder="Caption (optional)" rows="2"></textarea>
+                <select id="galleryTeam">
+                    <option value="General">General</option>
+                    <option value="Dynamights">Dynamights</option>
+                    <option value="Diamond Divas">Diamond Divas</option>
+                </select>
+                <button type="submit" class="btn-submit" id="galleryUploadBtn">
+                    <i class="fas fa-upload"></i> Upload Photo
+                </button>
+                <button type="button" onclick="closeModal('galleryModal')" class="btn-cancel">Cancel</button>
+            </form>
+        </div>
+    </div>
+
+    <div id="matchModal" class="modal-bg">
+        <div class="modal-box">
+            <h2>Add Match</h2>
+            <form onsubmit="createMatch(event)">
+                <select id="matchTeam" required>
+                    <option value="Dynamights">Dynamights</option>
+                    <option value="Diamond Divas">Diamond Divas</option>
+                </select>
+                <input type="text" id="matchHome" placeholder="Home Team" required />
+                <input type="text" id="matchAway" placeholder="Away Team" required />
+                <input type="date" id="matchDate" required />
+                <input type="time" id="matchTime" required />
+                <input type="text" id="matchVenue" placeholder="Venue" required />
+                <button type="submit" class="btn-submit">Add Match</button>
+                <button type="button" onclick="closeModal('matchModal')" class="btn-cancel">Cancel</button>
+            </form>
+        </div>
+    </div>
+
+    <div id="playerModal" class="modal-bg">
+        <div class="modal-box">
+            <h2>Add Player</h2>
+            <form onsubmit="createPlayer(event)">
+                <input type="text" id="playerFirstName" placeholder="First Name" required />
+                <input type="text" id="playerLastName" placeholder="Last Name" required />
+                <input type="text" id="playerMysafa" placeholder="MYSAFA ID" required />
+                <label class="mini" for="playerDob">Date of birth</label>
+                <input type="date" id="playerDob" required />
+                <input type="text" id="playerPosition" placeholder="Position (e.g. Central Midfielder)" required />
+                <input type="number" id="playerNumber" placeholder="Jersey Number" min="1" max="99" />
+                <select id="playerTeam" required>
+                    <option value="Dynamights">Dynamights</option>
+                    <option value="Diamond Divas">Diamond Divas</option>
+                </select>
+                <select id="playerAgeGroup" required>
+                    <option value="U15">Under 15</option>
+                    <option value="U10">Under 10</option>
+                </select>
+                <select id="playerStatus" required>
+                    <option value="fit">Fit</option>
+                    <option value="injured">Injured</option>
+                </select>
+                <input type="email" id="playerContactEmail" placeholder="Guardian email (optional)" />
+                <input type="tel" id="playerContactPhone" placeholder="Guardian phone (optional)" />
+                <button type="submit" class="btn-submit">Add Player</button>
+                <button type="button" onclick="closeModal('playerModal')" class="btn-cancel">Cancel</button>
+            </form>
+        </div>
+    </div>
+
+    <div id="staffModal" class="modal-bg">
+        <div class="modal-box">
+            <h2>Add Staff</h2>
+            <form onsubmit="createStaff(event)">
+                <input type="text" id="staffFirstName" placeholder="First Name" required />
+                <input type="text" id="staffLastName" placeholder="Last Name" required />
+                <input type="text" id="staffRole" placeholder="Role" required />
+                <select id="staffStatus" required>
+                    <option value="Full-time">Full-time</option>
+                    <option value="Part-time">Part-time</option>
+                    <option value="Volunteer">Volunteer</option>
+                    <option value="Contract">Contract</option>
+                </select>
+                <input type="email" id="staffEmail" placeholder="Email" required />
+                <input type="text" id="staffPhone" placeholder="Phone" />
+                <button type="submit" class="btn-submit">Add Staff</button>
+                <button type="button" onclick="closeModal('staffModal')" class="btn-cancel">Cancel</button>
+            </form>
+        </div>
+    </div>
+
+    <div id="inventoryModal" class="modal-bg">
+        <div class="modal-box">
+            <h2>Add Inventory Item</h2>
+            <form onsubmit="createInventory(event)">
+                <input type="text" id="itemName" placeholder="Item Name" required />
+                <input type="text" id="itemCategory" placeholder="Category" required />
+                <input type="number" id="itemQuantity" placeholder="Quantity" min="0" step="1" required />
+                <select id="itemCondition" required>
+                    <option value="New">New</option>
+                    <option value="Good">Good</option>
+                    <option value="Worn">Worn</option>
+                    <option value="Damaged">Damaged</option>
+                </select>
+                <input type="text" id="itemLocation" placeholder="Storage Location" required />
+                <button type="submit" class="btn-submit">Add Item</button>
+                <button type="button" onclick="closeModal('inventoryModal')" class="btn-cancel">Cancel</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Player Development: profile drawer -->
+    <div class="drawer-bg" id="pdiDrawerBg"></div>
+    <aside class="drawer" id="pdiDrawer" aria-label="Player profile">
+        <div class="drawer-head" id="pdiDrawerHead"></div>
+        <nav class="tabs" aria-label="Profile sections">
+            <button data-tab="overview" class="on"><i class="fas fa-id-card"></i> Overview</button>
+            <button data-tab="progress"><i class="fas fa-chart-line"></i> Progress</button>
+            <button data-tab="assess"><i class="fas fa-clipboard-check"></i> New assessment</button>
+            <button data-tab="edit"><i class="fas fa-pen"></i> Edit</button>
+        </nav>
+        <div class="drawer-body" id="pdiDrawerBody"></div>
+    </aside>
+
+    <!-- Player Development: compare -->
+    <div class="cmp-bg" id="cmpModal"><div class="cmp" id="cmpContent" role="dialog" aria-label="Compare players"></div></div>
+
+    <!-- Command palette -->
+    <div class="cmdk-bg" id="cmdk">
+        <div class="cmdk" role="dialog" aria-label="Search">
+            <div class="in"><i class="fas fa-magnifying-glass"></i><input id="cmdkInput" placeholder="Search players, pages and actions…" autocomplete="off"><kbd>Esc</kbd></div>
+            <ul id="cmdkList"></ul>
+            <div class="foot"><span>↑↓ navigate</span><span>↵ open</span><span>Ctrl K toggle</span></div>
+        </div>
+    </div>
+
+    <script src="/js/pdi.js"></script>
+    <script src="/js/modules.js"></script>
+    <script src="/js/v4.js"></script>
+    <script src="/js/assistant-widget.js" defer></script>
+    <script>
+        // Escape anything that came from a public form before putting it in the page.
+        function esc(v) { return String(v ?? '').replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c])); }
+        const __records = { msg: {}, vol: {}, tst: {} };
+        function viewMessageById(id) { const m = __records.msg[id]; if (m) viewMessage(m.name, m.email, m.message); }
+        function viewVolunteerById(id) { const v = __records.vol[id]; if (v) viewVolunteer(v.name, v.email, v.role, v.message || 'N/A'); }
+        function viewTestimonialById(id) { const t = __records.tst[id]; if (t) viewTestimonial(t.author_name, t.content); }
+
+        function exportTableToCSV(tbodyId, filename) {
+            const tbody = document.getElementById(tbodyId);
+            if (!tbody) return;
+
+            const table = tbody.closest('table');
+            const headers = Array.from(table.querySelectorAll('thead th')).map(th => th.textContent.trim());
+
+            const rows = [];
+            tbody.querySelectorAll('tr').forEach(tr => {
+                if (tr.querySelector('td[colspan]')) return;
+                if (tr.style.display === 'none') return;
+
+                const cells = Array.from(tr.querySelectorAll('td')).map(td => {
+                    let text = td.textContent.trim().replace(/\s+/g, ' ');
+                    if (text.includes('"') || text.includes(',') || text.includes('\n')) {
+                        text = '"' + text.replace(/"/g, '""') + '"';
+                    }
+                    return text;
+                });
+                rows.push(cells);
+            });
+
+            if (rows.length === 0) {
+                alert('No rows to export.');
+                return;
+            }
+
+            const csv = [headers.join(','), ...rows.map(r => r.join(','))].join('\n');
+            const blob = new Blob(['\uFEFF' + csv], { type: 'text/csv;charset=utf-8;' });
+            const url = URL.createObjectURL(blob);
+            const link = document.createElement('a');
+            link.href = url;
+            link.download = filename;
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+            URL.revokeObjectURL(url);
+        }
+
+        function injectExportButtons() {
+            const tables = [
+                { tbody: 'messagesTableBody', file: 'messages.csv' },
+                { tbody: 'volunteersTableBody', file: 'volunteers.csv' },
+                { tbody: 'newslettersTableBody', file: 'newsletters.csv' },
+                { tbody: 'pendingTestimonialsBody', file: 'testimonials_pending.csv' },
+                { tbody: 'approvedTestimonialsBody', file: 'testimonials_approved.csv' },
+                { tbody: 'matchesTableBody', file: 'matches.csv' },
+                { tbody: 'predictionsTableBody', file: 'predictions.csv' },
+                { tbody: 'playersTableBody', file: 'players.csv' },
+                { tbody: 'staffTableBody', file: 'staff.csv' },
+                { tbody: 'financeTableBody', file: 'finance.csv' },
+                { tbody: 'inventoryTableBody', file: 'inventory.csv' }
+            ];
+
+            tables.forEach(({ tbody, file }) => {
+                const tbodyEl = document.getElementById(tbody);
+                if (!tbodyEl) return;
+
+                const tableContainer = tbodyEl.closest('.table-container');
+                if (!tableContainer) return;
+
+                const searchBox = tableContainer.querySelector('.table-search');
+                if (!searchBox) return;
+
+                if (searchBox.parentNode.querySelector('.btn-export-csv')) return;
+
+                const btn = document.createElement('button');
+                btn.className = 'btn-export-csv';
+                btn.innerHTML = '<i class="fas fa-download"></i> Export CSV';
+                btn.onclick = () => exportTableToCSV(tbody, file);
+
+                const wrapper = document.createElement('div');
+                wrapper.className = 'search-with-export';
+                searchBox.parentNode.insertBefore(wrapper, searchBox);
+                wrapper.appendChild(searchBox);
+                wrapper.appendChild(btn);
+            });
+        }
+
+        function filterTable(tbodyId, query) {
+            const tbody = document.getElementById(tbodyId);
+            if (!tbody) return;
+
+            const rows = tbody.querySelectorAll('tr');
+            const q = query.toLowerCase().trim();
+
+            if (q === '') {
+                rows.forEach(row => {
+                    if (!row.querySelector('td[colspan]')) row.style.display = '';
+                });
+                removeNoResults(tbody);
+                return;
+            }
+
+            let visibleCount = 0;
+            rows.forEach(row => {
+                if (row.querySelector('td[colspan]')) return;
+                const text = row.textContent.toLowerCase();
+                const match = text.includes(q);
+                row.style.display = match ? '' : 'none';
+                if (match) visibleCount++;
+            });
+
+            if (visibleCount === 0) {
+                showNoResults(tbody);
+            } else {
+                removeNoResults(tbody);
+            }
+        }
+
+        function showNoResults(tbody) {
+            if (tbody.querySelector('.no-results-row')) return;
+            const colCount = tbody.closest('table').querySelectorAll('thead th').length || 1;
+            const tr = document.createElement('tr');
+            tr.className = 'no-results-row';
+            tr.innerHTML = `<td colspan="${colCount}" class="no-results">No matching results found.</td>`;
+            tbody.appendChild(tr);
+        }
+
+        function removeNoResults(tbody) {
+            const existing = tbody.querySelector('.no-results-row');
+            if (existing) existing.remove();
+        }
+
+        function getLastSixMonths() {
+            const months = [];
+            const labels = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+            const now = new Date();
+
+            for (let i = 5; i >= 0; i--) {
+                const d = new Date(now.getFullYear(), now.getMonth() - i, 1);
+                months.push({
+                    key: d.getFullYear() + '-' + String(d.getMonth() + 1).padStart(2, '0'),
+                    label: labels[d.getMonth()] + ' ' + String(d.getFullYear()).slice(-2),
+                    count: 0
+                });
+            }
+            return months;
+        }
+
+        function countByMonth(items) {
+            const months = getLastSixMonths();
+            items.forEach(item => {
+                if (!item.created_at) return;
+                const d = new Date(item.created_at);
+                const key = d.getFullYear() + '-' + String(d.getMonth() + 1).padStart(2, '0');
+                const match = months.find(m => m.key === key);
+                if (match) match.count++;
+            });
+            return months;
+        }
+
+        let messagesChartInstance = null;
+        let volunteersChartInstance = null;
+
+        function renderCharts(messages, volunteers) {
+            const msgMonths = countByMonth(messages);
+            const volMonths = countByMonth(volunteers);
+
+            const labels = msgMonths.map(m => m.label);
+            const msgData = msgMonths.map(m => m.count);
+            const volData = volMonths.map(m => m.count);
+
+            if (messagesChartInstance) messagesChartInstance.destroy();
+            if (volunteersChartInstance) volunteersChartInstance.destroy();
+
+            const msgCtx = document.getElementById('messagesChart');
+            const volCtx = document.getElementById('volunteersChart');
+            if (!msgCtx || !volCtx) return;
+
+            messagesChartInstance = new Chart(msgCtx, {
+                type: 'line',
+                data: {
+                    labels: labels,
+                    datasets: [{
+                        label: 'Messages',
+                        data: msgData,
+                        borderColor: '#b8944a',
+                        backgroundColor: 'rgba(184,148,74,0.12)',
+                        borderWidth: 3,
+                        fill: true,
+                        tension: 0.4,
+                        pointBackgroundColor: '#b8944a',
+                        pointBorderColor: '#fff',
+                        pointBorderWidth: 2,
+                        pointRadius: 5,
+                        pointHoverRadius: 7
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: { display: false },
+                        tooltip: {
+                            backgroundColor: '#0a1a33',
+                            titleColor: '#d4af6a',
+                            bodyColor: '#fff',
+                            padding: 12,
+                            borderColor: '#b8944a',
+                            borderWidth: 1,
+                            displayColors: false
+                        }
+                    },
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            ticks: { color: '#888', precision: 0 },
+                            grid: { color: '#f0f0f5' }
+                        },
+                        x: {
+                            ticks: { color: '#888' },
+                            grid: { display: false }
+                        }
+                    }
+                }
+            });
+
+            volunteersChartInstance = new Chart(volCtx, {
+                type: 'bar',
+                data: {
+                    labels: labels,
+                    datasets: [{
+                        label: 'Volunteers',
+                        data: volData,
+                        backgroundColor: '#0a1a33',
+                        hoverBackgroundColor: '#b8944a',
+                        borderRadius: 8,
+                        borderSkipped: false,
+                        barThickness: 'flex',
+                        maxBarThickness: 48
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: { display: false },
+                        tooltip: {
+                            backgroundColor: '#0a1a33',
+                            titleColor: '#d4af6a',
+                            bodyColor: '#fff',
+                            padding: 12,
+                            borderColor: '#b8944a',
+                            borderWidth: 1,
+                            displayColors: false
+                        }
+                    },
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            ticks: { color: '#888', precision: 0 },
+                            grid: { color: '#f0f0f5' }
+                        },
+                        x: {
+                            ticks: { color: '#888' },
+                            grid: { display: false }
+                        }
+                    }
+                }
+            });
+        }
+
+        let currentBroadcastId = null;
+
+        async function openBroadcastModal(newsletterId) {
+            currentBroadcastId = newsletterId;
+
+            const countEl = document.getElementById('broadcastCount');
+            const titleEl = document.getElementById('broadcastNewsletterTitle');
+            countEl.textContent = '...';
+            titleEl.textContent = 'Loading...';
+
+            document.getElementById('broadcastModal').style.display = 'flex';
+
+            try {
+                const res = await fetch(`/api/newsletters/${newsletterId}/recipients`);
+                const data = await res.json();
+
+                if (data.success) {
+                    countEl.textContent = `${data.recipient_count} recipient${data.recipient_count === 1 ? '' : 's'}`;
+                    titleEl.textContent = `"${data.newsletter_title}"`;
+                } else {
+                    countEl.textContent = '—';
+                    titleEl.textContent = data.error || 'Could not load recipients';
+                }
+            } catch (err) {
+                countEl.textContent = '—';
+                titleEl.textContent = 'Network error';
+            }
+        }
+
+        async function confirmBroadcast() {
+            if (!currentBroadcastId) return;
+
+            if (!confirm('Send this newsletter to all users? This cannot be undone.')) return;
+
+            const btn = document.getElementById('broadcastConfirmBtn');
+            const original = btn.innerHTML;
+            btn.disabled = true;
+            btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Sending...';
+
+            try {
+                const res = await fetch(`/api/newsletters/${currentBroadcastId}/broadcast`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' }
+                });
+                const data = await res.json();
+
+                if (data.success) {
+                    alert(`Broadcast complete.\n\nSent: ${data.sent}\nFailed: ${data.failed}\nTotal: ${data.total}`);
+                    closeModal('broadcastModal');
+                    currentBroadcastId = null;
+                } else {
+                    alert('Error: ' + (data.error || 'Broadcast failed'));
+                }
+            } catch (err) {
+                alert('Network error. Please try again.');
+            } finally {
+                btn.disabled = false;
+                btn.innerHTML = original;
+            }
+        }
+
+        async function checkLoginStatus() {
+            try {
+                const response = await fetch('/api/check-session');
+                const data = await response.json();
+
+                if (data.logged_in) {
+                    document.getElementById('loginOverlay').style.display = 'none';
+                    document.getElementById('dashboardContent').style.display = 'block';
+                    document.getElementById('userName').textContent = data.username || 'Admin';
+                    document.getElementById('userRole').textContent = data.role || 'Staff';
+                    window.__role = data.role;
+                    loadAllData();
+                } else {
+                    document.getElementById('loginOverlay').style.display = 'flex';
+                    document.getElementById('dashboardContent').style.display = 'none';
+                }
+            } catch (error) {
+                console.error('Error checking login status:', error);
+            }
+        }
+
+        async function handleStaffLogin(event) {
+            event.preventDefault();
+            const email = document.getElementById('overlayEmail').value;
+            const password = document.getElementById('overlayPassword').value;
+            const errorMessage = document.getElementById('errorMessage');
+
+            errorMessage.classList.remove('show');
+
+            if (!email || !password) {
+                errorMessage.textContent = 'Please enter both email and password.';
+                errorMessage.classList.add('show');
+                return;
+            }
+
+            try {
+                const response = await fetch('/api/staff-login', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ email, password })
+                });
+
+                const data = await response.json();
+
+                if (data.success) {
+                    try { sessionStorage.setItem('dfc_just_logged_in', '1'); } catch (e) {}
+                    document.getElementById('loginOverlay').style.display = 'none';
+                    document.getElementById('dashboardContent').style.display = 'block';
+                    document.getElementById('userName').textContent = data.username || 'Admin';
+                    document.getElementById('userRole').textContent = data.role || 'Staff';
+                    window.__role = data.role;
+                    loadAllData();
+                } else {
+                    errorMessage.textContent = data.message || 'Invalid email or password.';
+                    errorMessage.classList.add('show');
+                }
+            } catch (error) {
+                errorMessage.textContent = 'An error occurred. Please try again.';
+                errorMessage.classList.add('show');
+            }
+        }
+
+        function isAdminRole() { return ['System Administrator', 'Club Administrator'].includes(window.__role); }
+
+        function loadAllData() {
+            loadDashboardStats();
+            loadMatches();
+            loadPlayers();
+            if (isAdminRole()) {
+                // administrator-only sections; coaches never see them
+                loadMessages();
+                loadVolunteers();
+                loadNewsletters();
+                loadTestimonials();
+                loadGallery();
+                loadPredictions();
+                loadStaff();
+                loadFinance();
+                loadInventory();
+            }
+            if (window.PDI) PDI.init();
+            if (window.Modules) Modules.init().then(() => window.V4 && V4.init());
+        }
+
+        async function loadDashboardStats() {
+            try {
+                const list = async url => { try { const r = await fetch(url); const d = await r.json(); return Array.isArray(d) ? d : []; } catch (e) { return []; } };
+                const admin = isAdminRole();
+                const players = await list('/api/players-teams');
+                const messages = admin ? await list('/api/messages') : [];
+                const volunteers = admin ? await list('/api/volunteer') : [];
+                const photos = admin ? await list('/api/gallery') : [];
+
+                const setStat = (id, n) => window.animateCount ? animateCount(document.getElementById(id), n || 0) : (document.getElementById(id).textContent = n || 0);
+                setStat('statPlayers', players.length);
+                setStat('statMessages', messages.length);
+                setStat('statVolunteers', volunteers.length);
+                setStat('statPhotos', photos.length);
+
+                const unreadCount = messages.filter(m => !m.is_read).length;
+                document.getElementById('unreadBadge').textContent = unreadCount;
+
+                try { renderCharts(messages, volunteers); } catch (chartError) { console.warn('Charts unavailable:', chartError); }
+
+                const activity = document.getElementById('recentActivity');
+                activity.innerHTML = `
+                    <div class="activity-item"><span>${players.length} players in the system</span><span class="time">Now</span></div>
+                    ${admin ? `<div class="activity-item"><span>${messages.length} messages received</span><span class="time">Now</span></div>
+                    <div class="activity-item"><span>${volunteers.length} volunteer applications</span><span class="time">Now</span></div>
+                    <div class="activity-item"><span>${photos.length} gallery photos</span><span class="time">Now</span></div>` : ''}
+                `;
+            } catch (error) {
+                console.error('Error loading dashboard stats:', error);
+            }
+        }
+
+        function showPanel(panel, link) {
+            const target = document.getElementById('panel-' + panel);
+            if (!target) return;
+            document.querySelectorAll('.content-panel').forEach(p => p.classList.remove('active'));
+            document.querySelectorAll('.sidebar-menu a').forEach(a => a.classList.remove('active'));
+            target.classList.add('active');
+            const nav = link || document.querySelector(`.sidebar-menu a[data-panel="${panel}"]`);
+            if (nav) nav.classList.add('active');
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+
+            if (panel === 'gallery') loadGallery();
+            if (panel === 'testimonials') loadTestimonials();
+            if (panel === 'predictions') loadPredictions();
+            if (panel === 'development' && window.PDI) PDI.onShow();
+            if (window.Modules) Modules.onShow(panel);
+            if (window.V4) V4.onShow(panel);
+        }
+
+        async function logout() {
+            const response = await fetch('/api/logout', { method: 'POST' });
+            const data = await response.json();
+            window.location.href = data.redirect;
+        }
+
+        function closeModal(id) {
+            document.getElementById(id).style.display = 'none';
+            const form = document.getElementById(id).querySelector('form');
+            if (form) form.reset();
+        }
+
+        async function loadMessages() {
+            try {
+                const response = await fetch('/api/messages');
+                const messages = await response.json();
+                messages.forEach(m => __records.msg[m.message_id] = m);
+                const tbody = document.getElementById('messagesTableBody');
+
+                if (messages.length === 0) {
+                    tbody.innerHTML = '<tr><td colspan="6" style="text-align:center;color:#888;">No messages received.</td></tr>';
+                    return;
+                }
+
+                tbody.innerHTML = messages.map(m => {
+                    const safeName = (m.name || '').replace(/'/g, "\\'");
+                    const safeEmail = (m.email || '').replace(/'/g, "\\'");
+                    const safeMessage = (m.message || '').replace(/`/g, '`').replace(/'/g, "\\'");
+                    return `
+                    <tr>
+                        <td><strong>${esc(m.name)}</strong><br><small style="color:#888;">${esc(m.email)}</small></td>
+                        <td>${esc(m.subject)}</td>
+                        <td>${esc((m.message || '').substring(0, 50))}${(m.message || '').length > 50 ? '...' : ''}</td>
+                        <td>${new Date(m.created_at).toLocaleDateString()}</td>
+                        <td><span class="status-badge ${m.is_read ? 'read' : 'unread'}">${m.is_read ? 'Read' : 'Unread'}</span></td>
+                        <td>
+                            <button class="btn-action view" onclick="viewMessageById(${m.message_id})">View</button>
+                            ${!m.is_read ? `<button class="btn-action view" onclick="markMessageRead(${m.message_id})">Mark Read</button>` : ''}
+                            <button class="btn-action delete" onclick="deleteMessage(${m.message_id})"><i class="fas fa-trash"></i> Delete</button>
+                        </td>
+                    </tr>
+                    `;
+                }).join('');
+            } catch (error) {
+                console.error('Error loading messages:', error);
+            }
+        }
+
+        async function markMessageRead(message_id) {
+            try {
+                await fetch(`/api/messages/${message_id}/read`, { method: 'PUT' });
+                loadMessages();
+                loadDashboardStats();
+            } catch (error) {
+                console.error('Error marking message read:', error);
+            }
+        }
+
+        async function deleteMessage(message_id) {
+            if (!confirm('Delete this message permanently?')) return;
+            try {
+                const res = await fetch(`/api/messages/${message_id}`, { method: 'DELETE' });
+                const data = await res.json();
+                if (data.success) {
+                    loadMessages();
+                    loadDashboardStats();
+                } else {
+                    alert('Error: ' + (data.error || 'Failed to delete'));
+                }
+            } catch (err) {
+                alert('Network error');
+                console.error(err);
+            }
+        }
+
+        function viewMessage(name, email, message) {
+            alert(`From: ${name}\nEmail: ${email}\n\n${message}`);
+        }
+
+        async function loadVolunteers() {
+            try {
+                const response = await fetch('/api/volunteer');
+                const volunteers = await response.json();
+                volunteers.forEach(v => __records.vol[v.volunteer_id] = v);
+                const tbody = document.getElementById('volunteersTableBody');
+
+                if (volunteers.length === 0) {
+                    tbody.innerHTML = '<tr><td colspan="6" style="text-align:center;color:#888;">No volunteer applications.</td></tr>';
+                    return;
+                }
+
+                tbody.innerHTML = volunteers.map(v => {
+                    const safeName = (v.name || '').replace(/'/g, "\\'");
+                    const safeEmail = (v.email || '').replace(/'/g, "\\'");
+                    const safeRole = (v.role || '').replace(/'/g, "\\'");
+                    const safeMessage = (v.message || 'N/A').replace(/'/g, "\\'");
+                    return `
+                    <tr>
+                        <td><strong>${esc(v.name)}</strong></td>
+                        <td>${esc(v.email)}</td>
+                        <td>${esc(v.role)}</td>
+                        <td>${esc(v.availability || '-')}</td>
+                        <td>${new Date(v.created_at).toLocaleDateString()}</td>
+                        <td>
+                            <button class="btn-action view" onclick="viewVolunteerById(${v.volunteer_id})">View</button>
+                            <button class="btn-action delete" onclick="deleteVolunteer(${v.volunteer_id})"><i class="fas fa-trash"></i> Delete</button>
+                        </td>
+                    </tr>
+                    `;
+                }).join('');
+            } catch (error) {
+                console.error('Error loading volunteers:', error);
+            }
+        }
+
+        async function deleteVolunteer(id) {
+            if (!confirm('Delete this volunteer application?')) return;
+            try {
+                const res = await fetch(`/api/volunteer/${id}`, { method: 'DELETE' });
+                const data = await res.json();
+                if (data.success) {
+                    loadVolunteers();
+                    loadDashboardStats();
+                } else {
+                    alert('Error: ' + (data.error || 'Failed to delete'));
+                }
+            } catch (err) {
+                alert('Network error');
+            }
+        }
+
+        function viewVolunteer(name, email, role, message) {
+            alert(`Name: ${name}\nEmail: ${email}\nRole: ${role}\n\n${message}`);
+        }
+
+        async function loadNewsletters() {
+            try {
+                const response = await fetch('/api/newsletters');
+                const newsletters = await response.json();
+                const tbody = document.getElementById('newslettersTableBody');
+
+                if (newsletters.length === 0) {
+                    tbody.innerHTML = '<tr><td colspan="4" style="text-align:center;color:#888;">No newsletters yet.</td></tr>';
+                    return;
+                }
+
+                tbody.innerHTML = newsletters.map(n => `
+                    <tr>
+                        <td><strong>${n.title}</strong></td>
+                        <td>${n.content.substring(0, 50)}...</td>
+                        <td>${n.is_published ? 'Published' : 'Draft'}</td>
+                        <td>
+                            <button class="btn-broadcast" onclick="openBroadcastModal(${n.newsletter_id})">
+                                <i class="fas fa-paper-plane"></i> Broadcast
+                            </button>
+                            <button class="btn-action delete" onclick="deleteNewsletter(${n.newsletter_id})"><i class="fas fa-trash"></i> Delete</button>
+                        </td>
+                    </tr>
+                `).join('');
+            } catch (error) {
+                console.error('Error loading newsletters:', error);
+            }
+        }
+
+        function openNewsletterModal() {
+            document.getElementById('newsletterModal').style.display = 'flex';
+        }
+
+        async function createNewsletter(event) {
+            event.preventDefault();
+            const title = document.getElementById('newsletterTitle').value;
+            const content = document.getElementById('newsletterContent').value;
+            const image_url = document.getElementById('newsletterImage').value;
+
+            try {
+                const response = await fetch('/api/newsletters', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ title, content, image_url })
+                });
+                const data = await response.json();
+                if (data.success) {
+                    alert('Newsletter published successfully!');
+                    closeModal('newsletterModal');
+                    loadNewsletters();
+                } else {
+                    alert('Error: ' + data.error);
+                }
+            } catch (error) {
+                alert('An error occurred.');
+            }
+        }
+
+        async function deleteNewsletter(id) {
+            if (!confirm('Delete this newsletter?')) return;
+            try {
+                const res = await fetch(`/api/newsletters/${id}`, { method: 'DELETE' });
+                const data = await res.json();
+                if (data.success) {
+                    loadNewsletters();
+                } else {
+                    alert('Error: ' + (data.error || 'Failed'));
+                }
+            } catch (err) {
+                alert('Network error');
+            }
+        }
+
+        async function loadTestimonials() {
+            try {
+                const [pendingRes, approvedRes] = await Promise.all([
+                    fetch('/api/testimonials?status=pending'),
+                    fetch('/api/testimonials?status=approved')
+                ]);
+
+                const pending = await pendingRes.json();
+                const approved = await approvedRes.json();
+                [...pending, ...approved].forEach(t => __records.tst[t.testimonial_id] = t);
+
+                const badge = document.getElementById('pendingTestimonialsBadge');
+                if (badge) badge.textContent = pending.length;
+
+                const pendingBody = document.getElementById('pendingTestimonialsBody');
+                if (pending.length === 0) {
+                    pendingBody.innerHTML = '<tr><td colspan="5" style="text-align:center;color:#888;">No pending testimonials.</td></tr>';
+                } else {
+                    pendingBody.innerHTML = pending.map(t => `
+                        <tr>
+                            <td><strong>${esc(t.author_name)}</strong></td>
+                            <td>${esc(t.author_role)}</td>
+                            <td>${esc((t.content || '').substring(0, 60))}${(t.content || '').length > 60 ? '...' : ''}</td>
+                            <td>${new Date(t.created_at).toLocaleDateString()}</td>
+                            <td>
+                                <button class="btn-action view" onclick="viewTestimonialById(${t.testimonial_id})">View</button>
+                                <button class="btn-action approve" onclick="updateTestimonialStatus(${t.testimonial_id}, 'approved')"><i class="fas fa-check"></i> Approve</button>
+                                <button class="btn-action reject" onclick="updateTestimonialStatus(${t.testimonial_id}, 'rejected')"><i class="fas fa-times"></i> Reject</button>
+                                <button class="btn-action delete" onclick="deleteTestimonial(${t.testimonial_id})"><i class="fas fa-trash"></i></button>
+                            </td>
+                        </tr>
+                    `).join('');
+                }
+
+                const approvedBody = document.getElementById('approvedTestimonialsBody');
+                if (approved.length === 0) {
+                    approvedBody.innerHTML = '<tr><td colspan="5" style="text-align:center;color:#888;">No approved testimonials yet.</td></tr>';
+                } else {
+                    approvedBody.innerHTML = approved.map(t => `
+                        <tr>
+                            <td><strong>${esc(t.author_name)}</strong></td>
+                            <td>${esc(t.author_role)}</td>
+                            <td>${esc((t.content || '').substring(0, 60))}${(t.content || '').length > 60 ? '...' : ''}</td>
+                            <td>${t.approved_at ? new Date(t.approved_at).toLocaleDateString() : '-'}</td>
+                            <td>
+                                <button class="btn-action reject" onclick="updateTestimonialStatus(${t.testimonial_id}, 'pending')"><i class="fas fa-undo"></i> Unpublish</button>
+                                <button class="btn-action delete" onclick="deleteTestimonial(${t.testimonial_id})"><i class="fas fa-trash"></i></button>
+                            </td>
+                        </tr>
+                    `).join('');
+                }
+            } catch (error) {
+                console.error('Error loading testimonials:', error);
+            }
+        }
+
+        function viewTestimonial(name, content) {
+            alert(`${name} wrote:\n\n"${content}"`);
+        }
+
+        async function updateTestimonialStatus(id, status) {
+            try {
+                const res = await fetch(`/api/testimonials/${id}/status`, {
+                    method: 'PUT',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ status })
+                });
+                const data = await res.json();
+                if (data.success) {
+                    loadTestimonials();
+                } else {
+                    alert('Error: ' + (data.error || 'Failed'));
+                }
+            } catch (err) {
+                alert('Network error');
+            }
+        }
+
+        async function deleteTestimonial(id) {
+            if (!confirm('Delete this testimonial permanently?')) return;
+            try {
+                const res = await fetch(`/api/testimonials/${id}`, { method: 'DELETE' });
+                const data = await res.json();
+                if (data.success) {
+                    loadTestimonials();
+                } else {
+                    alert('Error: ' + (data.error || 'Failed'));
+                }
+            } catch (err) {
+                alert('Network error');
+            }
+        }
+
+        async function loadGallery() {
+            try {
+                const response = await fetch('/api/gallery');
+                const photos = await response.json();
+                const grid = document.getElementById('galleryGrid');
+
+                if (photos.length === 0) {
+                    grid.innerHTML = '<p style="text-align:center;color:#888;grid-column:1/-1;">No photos uploaded yet. Click "Upload Photo" to add one.</p>';
+                    return;
+                }
+
+                grid.innerHTML = photos.map(p => `
+                    <div class="gallery-item">
+                        <img src="${p.file_path}" alt="${p.title || 'Gallery photo'}" loading="lazy" />
+                        <button class="gallery-delete" onclick="deleteGalleryPhoto(${p.photo_id})" title="Delete photo">
+                            <i class="fas fa-trash"></i>
+                        </button>
+                        <div class="gallery-info">
+                            <h4>${p.title || 'Untitled'}</h4>
+                            <p>${p.caption || p.team_group || ''}</p>
+                        </div>
+                    </div>
+                `).join('');
+            } catch (error) {
+                console.error('Error loading gallery:', error);
+            }
+        }
+
+        function openGalleryModal() {
+            document.getElementById('galleryModal').style.display = 'flex';
+        }
+
+        async function uploadGalleryPhoto(event) {
+            event.preventDefault();
+            const fileInput = document.getElementById('galleryFile');
+            const title = document.getElementById('galleryTitle').value;
+            const caption = document.getElementById('galleryCaption').value;
+            const team_group = document.getElementById('galleryTeam').value;
+            const btn = document.getElementById('galleryUploadBtn');
+
+            if (!fileInput.files || fileInput.files.length === 0) {
+                alert('Please choose a file');
+                return;
+            }
+
+            const formData = new FormData();
+            formData.append('file', fileInput.files[0]);
+
+            btn.disabled = true;
+            btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Uploading...';
+
+            try {
+                const uploadRes = await fetch('/api/upload', {
+                    method: 'POST',
+                    body: formData
+                });
+                const uploadData = await uploadRes.json();
+
+                if (!uploadData.success) {
+                    alert('Upload failed: ' + (uploadData.error || 'unknown'));
+                    btn.disabled = false;
+                    btn.innerHTML = '<i class="fas fa-upload"></i> Upload Photo';
+                    return;
+                }
+
+                const saveRes = await fetch('/api/gallery', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        title,
+                        caption,
+                        team_group,
+                        file_path: uploadData.url
+                    })
+                });
+                const saveData = await saveRes.json();
+
+                if (saveData.success) {
+                    alert('Photo uploaded!');
+                    closeModal('galleryModal');
+                    loadGallery();
+                    loadDashboardStats();
+                } else {
+                    alert('Error saving to gallery: ' + (saveData.error || 'unknown'));
+                }
+            } catch (err) {
+                alert('Network error: ' + err.message);
+            } finally {
+                btn.disabled = false;
+                btn.innerHTML = '<i class="fas fa-upload"></i> Upload Photo';
+            }
+        }
+
+        async function deleteGalleryPhoto(photoId) {
+            if (!confirm('Delete this photo permanently?')) return;
+            try {
+                const res = await fetch(`/api/gallery/${photoId}`, { method: 'DELETE' });
+                const data = await res.json();
+                if (data.success) {
+                    loadGallery();
+                    loadDashboardStats();
+                } else {
+                    alert('Error: ' + (data.error || 'Failed'));
+                }
+            } catch (err) {
+                alert('Network error');
+            }
+        }
+
+        async function loadMatches() {
+            try {
+                const response = await fetch('/api/team-matches');
+                const matches = await response.json();
+                const tbody = document.getElementById('matchesTableBody');
+                window.__rows = window.__rows || {}; window.__rows.matches = matches;
+
+                if (matches.length === 0) {
+                    tbody.innerHTML = '<tr><td colspan="8" style="text-align:center;color:#888;">No matches scheduled.</td></tr>';
+                    return;
+                }
+
+                tbody.innerHTML = matches.map(m => `
+                    <tr>
+                        <td>${esc(m.team_group)}</td>
+                        <td>${esc(m.home_team)}</td>
+                        <td>${esc(m.away_team)}</td>
+                        <td>${esc(m.match_date)}</td>
+                        <td>${esc(m.venue)}</td>
+                        <td>${m.is_completed ? esc(m.home_score) + ' - ' + esc(m.away_score) : 'TBD'}</td>
+                        <td>${m.is_completed ? 'Completed' : 'Upcoming'}</td>
+                        <td style="white-space:nowrap">
+                            ${!m.is_completed ? `<button class="btn-action approve" onclick='recordResult(${m.match_id}, ${JSON.stringify(m.home_team).replace(/'/g, "&#39;")}, ${JSON.stringify(m.away_team).replace(/'/g, "&#39;")})'><i class="fas fa-flag-checkered"></i> Record result</button>` : ''}
+                            <button class="btn-action view" onclick="V4.editMatch(${Number(m.match_id)})"><i class="fas fa-pen"></i> Edit</button>
+                            ${isAdminRole() ? `<button class="btn-action delete" onclick="deleteMatch(${Number(m.match_id)})"><i class="fas fa-trash"></i> Delete</button>` : ''}
+                        </td>
+                    </tr>
+                `).join('');
+            } catch (error) {
+                console.error('Error loading matches:', error);
+            }
+        }
+
+        async function deleteMatch(id) {
+            if (!confirm('Delete this match? (Will also delete any predictions/votes)')) return;
+            try {
+                const res = await fetch(`/api/team-matches/${id}`, { method: 'DELETE' });
+                const data = await res.json();
+                if (data.success) {
+                    loadMatches();
+                } else {
+                    alert('Error: ' + (data.error || 'Failed'));
+                }
+            } catch (err) {
+                alert('Network error');
+            }
+        }
+
+        function openMatchModal() {
+            document.getElementById('matchModal').style.display = 'flex';
+        }
+
+        async function createMatch(event) {
+            event.preventDefault();
+            const team_group = document.getElementById('matchTeam').value;
+            const home_team = document.getElementById('matchHome').value;
+            const away_team = document.getElementById('matchAway').value;
+            const match_date = document.getElementById('matchDate').value;
+            const match_time = document.getElementById('matchTime').value;
+            const venue = document.getElementById('matchVenue').value;
+
+            try {
+                const response = await fetch('/api/team-matches', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ team_group, home_team, away_team, match_date, match_time, venue })
+                });
+                const data = await response.json();
+                if (data.success) {
+                    alert('Match created successfully!');
+                    closeModal('matchModal');
+                    loadMatches();
+                } else {
+                    alert('Error: ' + data.error);
+                }
+            } catch (error) {
+                alert('An error occurred.');
+            }
+        }
+
+        async function loadPredictions() {
+            try {
+                const res = await fetch('/api/all-predictions');
+                const preds = await res.json();
+                const tbody = document.getElementById('predictionsTableBody');
+
+                if (preds.length === 0) {
+                    tbody.innerHTML = '<tr><td colspan="6" style="text-align:center;color:#888;">No predictions yet.</td></tr>';
+                    return;
+                }
+
+                tbody.innerHTML = preds.map(p => {
+                    let pointsBadge = '<span style="color:#888;">—</span>';
+                    if (p.points === 3) pointsBadge = '<span class="status-badge approved">Exact! 3pts</span>';
+                    else if (p.points === 1) pointsBadge = '<span class="status-badge pending">Winner 1pt</span>';
+                    else if (p.points === 0) pointsBadge = '<span class="status-badge rejected">0pts</span>';
+
+                    return `
+                    <tr>
+                        <td><strong>${p.username}</strong></td>
+                        <td>${p.home_team} vs ${p.away_team}</td>
+                        <td><strong>${p.predicted_home} - ${p.predicted_away}</strong></td>
+                        <td>${p.is_completed ? `${p.actual_home} - ${p.actual_away}` : 'Pending'}</td>
+                        <td>${pointsBadge}</td>
+                        <td>${new Date(p.predicted_at).toLocaleDateString()}</td>
+                    </tr>
+                    `;
+                }).join('');
+            } catch (err) {
+                console.error('Error loading predictions:', err);
+            }
+        }
+
+        async function loadPlayers() {
+            try {
+                const response = await fetch('/api/players-teams');
+                const players = await response.json();
+                const tbody = document.getElementById('playersTableBody');
+
+                if (players.length === 0) {
+                    tbody.innerHTML = '<tr><td colspan="7" style="text-align:center;color:#888;">No players found.</td></tr>';
+                    return;
+                }
+
+                tbody.innerHTML = players.map(p => `
+                    <tr>
+                        <td><div class="player-cell">${window.PDI_rowPrefix ? PDI_rowPrefix(p) : ''}<strong>${p.first_name} ${p.last_name}</strong></div></td>
+                        <td>${p.position || '-'}</td>
+                        <td>${p.team_group || '-'}</td>
+                        <td>${p.age_group || '-'}</td>
+                        <td>#${p.jersey_number || '-'}</td>
+                        <td><span class="status-badge ${p.is_active ? 'read' : 'unread'}">${p.is_active ? 'Active' : 'Inactive'}</span></td>
+                        <td>
+                            <button class="btn-action dev" onclick="showPanel('development'); PDI.openPlayer(${p.player_id})"><i class="fas fa-ranking-star"></i> Profile</button>
+                            <button class="btn-action delete" onclick="deletePlayer(${p.player_id})"><i class="fas fa-trash"></i> Delete</button>
+                        </td>
+                    </tr>
+                `).join('');
+            } catch (error) {
+                console.error('Error loading players:', error);
+            }
+        }
+
+        async function deletePlayer(id) {
+            if (!confirm('Delete this player?')) return;
+            try {
+                const res = await fetch(`/api/players/${id}`, { method: 'DELETE' });
+                const data = await res.json();
+                if (data.success) {
+                    loadPlayers();
+                    loadDashboardStats();
+                } else {
+                    alert('Error: ' + (data.error || 'Failed'));
+                }
+            } catch (err) {
+                alert('Network error');
+            }
+        }
+
+        function openPlayerModal() {
+            document.getElementById('playerModal').style.display = 'flex';
+        }
+
+        async function createPlayer(event) {
+            event.preventDefault();
+            const val = id => document.getElementById(id).value.trim();
+            const body = {
+                first_name: val('playerFirstName'),
+                last_name: val('playerLastName'),
+                mysafa_id: val('playerMysafa'),
+                date_of_birth: val('playerDob'),
+                position: val('playerPosition'),
+                jersey_number: val('playerNumber') || null,
+                team_group: val('playerTeam'),
+                age_group: val('playerAgeGroup'),
+                is_injured: val('playerStatus') === 'injured' ? 1 : 0,
+                is_active: 1,
+                contact_email: val('playerContactEmail') || null,
+                contact_phone: val('playerContactPhone') || null
+            };
+            try {
+                const response = await fetch('/api/players', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(body)
+                });
+                const data = await response.json();
+                if (data.success) {
+                    alert('Player added successfully!');
+                    closeModal('playerModal');
+                    event.target.reset();
+                    loadPlayers();
+                    if (window.PDI) PDI.refresh();
+                } else {
+                    alert('Error: ' + data.error);
+                }
+            } catch (error) {
+                alert('An error occurred.');
+            }
+        }
+
+        async function loadStaff() {
+            try {
+                const response = await fetch('/api/staff');
+                const staff = await response.json();
+                const tbody = document.getElementById('staffTableBody');
+
+                if (staff.length === 0) {
+                    tbody.innerHTML = '<tr><td colspan="5" style="text-align:center;color:#888;">No staff found.</td></tr>';
+                    return;
+                }
+
+                window.__rows = window.__rows || {}; window.__rows.staff = staff;
+                tbody.innerHTML = staff.map(s => `
+                    <tr>
+                        <td><strong>${esc(s.first_name)} ${esc(s.last_name)}</strong></td>
+                        <td>${esc(s.role)}</td>
+                        <td><span class="status-badge ${s.employment_status === 'Full-time' ? 'read' : 'unread'}">${esc(s.employment_status)}</span></td>
+                        <td>${esc(s.contact_email || '-')}</td>
+                        <td style="white-space:nowrap">
+                            <button class="btn-action view" onclick="V4.editStaff(${Number(s.staff_id)})"><i class="fas fa-pen"></i> Edit</button>
+                            <button class="btn-action delete" onclick="deleteStaff(${Number(s.staff_id)})"><i class="fas fa-trash"></i> Delete</button>
+                        </td>
+                    </tr>
+                `).join('');
+            } catch (error) {
+                console.error('Error loading staff:', error);
+            }
+        }
+
+        async function deleteStaff(id) {
+            if (!confirm('Delete this staff member?')) return;
+            try {
+                const res = await fetch(`/api/staff/${id}`, { method: 'DELETE' });
+                const data = await res.json();
+                if (data.success) {
+                    loadStaff();
+                } else {
+                    alert('Error: ' + (data.error || 'Failed'));
+                }
+            } catch (err) {
+                alert('Network error');
+            }
+        }
+
+        function openStaffModal() {
+            document.getElementById('staffModal').style.display = 'flex';
+        }
+
+        async function createStaff(event) {
+            event.preventDefault();
+            const first_name = document.getElementById('staffFirstName').value;
+            const last_name = document.getElementById('staffLastName').value;
+            const role = document.getElementById('staffRole').value;
+            const employment_status = document.getElementById('staffStatus').value;
+            const contact_email = document.getElementById('staffEmail').value;
+            const contact_phone = document.getElementById('staffPhone').value;
+
+            try {
+                const response = await fetch('/api/staff', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        first_name, last_name, role, employment_status,
+                        contact_email, contact_phone,
+                        date_joined: new Date().toISOString().split('T')[0]
+                    })
+                });
+                const data = await response.json();
+                if (data.success) {
+                    alert('Staff added successfully!');
+                    closeModal('staffModal');
+                    loadStaff();
+                } else {
+                    alert('Error: ' + data.error);
+                }
+            } catch (error) {
+                alert('An error occurred.');
+            }
+        }
+
+        async function loadFinance() {
+            try {
+                const response = await fetch('/api/finance');
+                const finance = await response.json();
+                const tbody = document.getElementById('financeTableBody');
+
+                if (finance.length === 0) {
+                    tbody.innerHTML = '<tr><td colspan="4" style="text-align:center;color:#888;">No transactions found.</td></tr>';
+                    return;
+                }
+
+                tbody.innerHTML = finance.map(f => `
+                    <tr>
+                        <td>${esc(f.month)}</td>
+                        <td>${esc(f.description || 'Monthly summary')}</td>
+                        <td style="color:${f.income > 0 ? '#28a745' : '#dc3545'}">R${parseFloat(f.income || 0).toFixed(2)}</td>
+                        <td>${f.expenses ? 'R' + parseFloat(f.expenses).toFixed(2) : '-'}</td>
+                    </tr>
+                `).join('');
+            } catch (error) {
+                console.error('Error loading finance:', error);
+            }
+        }
+
+        async function loadInventory() {
+            try {
+                const response = await fetch('/api/inventory');
+                const inventory = await response.json();
+                const tbody = document.getElementById('inventoryTableBody');
+
+                if (inventory.length === 0) {
+                    tbody.innerHTML = '<tr><td colspan="6" style="text-align:center;color:#888;">No inventory items found.</td></tr>';
+                    return;
+                }
+
+                window.__rows = window.__rows || {}; window.__rows.inventory = inventory;
+                tbody.innerHTML = inventory.map(item => `
+                    <tr>
+                        <td><strong>${esc(item.item_name)}</strong></td>
+                        <td>${esc(item.category)}</td>
+                        <td>${esc(item.quantity)}</td>
+                        <td><span class="status-badge ${item.item_condition === 'New' ? 'read' : 'unread'}">${esc(item.item_condition)}</span></td>
+                        <td>${esc(item.storage_location || '-')}</td>
+                        <td style="white-space:nowrap">
+                            <button class="btn-action view" onclick="V4.editItem(${Number(item.item_id ?? item.inventory_id)})"><i class="fas fa-pen"></i> Edit</button>
+                            <button class="btn-action delete" onclick="V4.deleteItem(${Number(item.item_id ?? item.inventory_id)})"><i class="fas fa-trash"></i> Delete</button>
+                        </td>
+                    </tr>
+                `).join('');
+            } catch (error) {
+                console.error('Error loading inventory:', error);
+            }
+        }
+
+        function openInventoryModal() {
+            document.getElementById('inventoryModal').style.display = 'flex';
+        }
+
+        async function createInventory(event) {
+            event.preventDefault();
+            const item_name = document.getElementById('itemName').value;
+            const category = document.getElementById('itemCategory').value;
+            const quantity = document.getElementById('itemQuantity').value;
+            const item_condition = document.getElementById('itemCondition').value;
+            const storage_location = document.getElementById('itemLocation').value;
+
+            try {
+                const response = await fetch('/api/inventory', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ item_name, category, quantity, item_condition, storage_location })
+                });
+                const data = await response.json();
+                if (data.success) {
+                    alert('Inventory item added successfully!');
+                    closeModal('inventoryModal');
+                    loadInventory();
+                } else {
+                    alert('Error: ' + data.error);
+                }
+            } catch (error) {
+                alert('An error occurred.');
+            }
+        }
+
+        document.addEventListener('DOMContentLoaded', function() {
+            checkLoginStatus();
+            injectExportButtons();
+        });
+    </script>
+
+</body>
+</html>

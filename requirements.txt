@@ -1,0 +1,24 @@
+flask
+flask-cors
+mysql-connector-python
+python-dotenv
+sendgrid
+requests
+Werkzeug
+google-auth
+google-auth-oauthlib
+google-auth-httplib2
+gunicorn
+Flask-Limiter
+Flask-Talisman
+Flask-WTF
+Flask-SeaSurf
+# Integrated modules (documents, finance, ML predictions, assistant)
+numpy>=1.26
+pandas>=2.0
+scikit-learn>=1.4
+openpyxl>=3.1
+pdfplumber>=0.11
+pytesseract>=0.3.10
+python-docx>=1.1
+Pillow>=10.0

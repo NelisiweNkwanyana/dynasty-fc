@@ -1,0 +1,1068 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <title>About - Dynasty FC</title>
+    <link rel="stylesheet" href="/css/style.css" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        :root {
+            --navy: #0a1a33;
+            --navy-deep: #060f1f;
+            --navy-light: #162a4a;
+            --gold: #b8944a;
+            --gold-soft: #d4af6a;
+            --cream: #f8f6f1;
+            --white: #ffffff;
+            --text: #2a2a35;
+            --text-light: #666;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: #fff;
+            color: var(--text);
+            overflow-x: hidden;
+            line-height: 1.7;
+        }
+
+        /* NAVBAR */
+        .navbar {
+            background: var(--navy-deep);
+            padding: 18px 0;
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.4);
+        }
+        .nav-container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 30px;
+        }
+        .nav-logo { display: flex; align-items: center; gap: 10px; }
+        .nav-logo img { height: 42px; }
+        .nav-logo .brand-text .club-name { font-size: 18px; font-weight: 700; color: #fff; }
+        .nav-logo .brand-text .club-name span { color: var(--gold-soft); }
+        .nav-logo .brand-text .tagline {
+            font-size: 10px; color: #7a8699; letter-spacing: 3px; text-transform: uppercase;
+        }
+        .nav-menu { list-style: none; display: flex; gap: 22px; align-items: center; }
+        .nav-menu a {
+            color: #b8c1d1; font-size: 14px; font-weight: 500;
+            transition: color 0.3s; padding: 5px 8px; text-decoration: none;
+        }
+        .nav-menu a:hover, .nav-menu .active { color: var(--gold-soft); }
+
+        /* HERO */
+        .about-hero {
+            position: relative;
+            min-height: 85vh;
+            background-image: url('/images/about-hero.png');
+            background-size: cover;
+            background-position: center;
+            background-attachment: fixed;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            overflow: hidden;
+        }
+        .about-hero::before {
+            content: '';
+            position: absolute;
+            top: 0; left: 0; right: 0; bottom: 0;
+            background: linear-gradient(
+                180deg,
+                rgba(6, 15, 31, 0.82) 0%,
+                rgba(6, 15, 31, 0.7) 50%,
+                rgba(6, 15, 31, 0.9) 100%
+            );
+            z-index: 1;
+        }
+        .about-hero .hero-inner {
+            position: relative;
+            z-index: 2;
+            max-width: 900px;
+            padding: 40px 25px;
+        }
+        .about-hero .eyebrow {
+            display: inline-flex;
+            align-items: center;
+            gap: 14px;
+            font-size: 12px;
+            letter-spacing: 6px;
+            color: var(--gold-soft);
+            font-weight: 600;
+            text-transform: uppercase;
+            margin-bottom: 30px;
+        }
+        .about-hero .eyebrow::before,
+        .about-hero .eyebrow::after {
+            content: '';
+            width: 40px;
+            height: 1px;
+            background: var(--gold-soft);
+        }
+        .about-hero h1 {
+            font-size: 78px;
+            font-weight: 300;
+            color: #fff;
+            line-height: 1.05;
+            letter-spacing: -1px;
+            margin-bottom: 25px;
+            text-shadow: 0 10px 40px rgba(0,0,0,0.5);
+        }
+        .about-hero h1 span {
+            color: var(--gold-soft);
+            display: block;
+            margin-top: 10px;
+            font-weight: 500;
+        }
+        .about-hero .tagline-big {
+            font-size: 20px;
+            color: #c8d1e0;
+            font-weight: 300;
+            letter-spacing: 0.5px;
+            line-height: 1.7;
+            max-width: 700px;
+            margin: 15px auto 0;
+        }
+
+        .scroll-down {
+            position: absolute;
+            bottom: 40px;
+            left: 50%;
+            transform: translateX(-50%);
+            z-index: 2;
+            color: #fff;
+            font-size: 20px;
+            animation: bounceDown 2s infinite;
+            opacity: 0.5;
+            text-decoration: none;
+        }
+        @keyframes bounceDown {
+            0%, 100% { transform: translateX(-50%) translateY(0); }
+            50% { transform: translateX(-50%) translateY(10px); }
+        }
+
+        /* SECTION LABEL */
+        .section-label {
+            display: block;
+            font-size: 12px;
+            letter-spacing: 6px;
+            color: var(--gold);
+            font-weight: 600;
+            text-transform: uppercase;
+            margin-bottom: 22px;
+        }
+
+        /* INTRO */
+        .intro-section {
+            padding: 130px 30px 100px;
+            background: var(--white);
+        }
+        .intro-section .container {
+            max-width: 900px;
+            margin: 0 auto;
+        }
+        .intro-section h1 {
+            font-size: 62px;
+            font-weight: 300;
+            color: var(--navy);
+            line-height: 1.1;
+            letter-spacing: -1.5px;
+            margin-bottom: 45px;
+        }
+        .intro-section h1 span {
+            display: block;
+            color: var(--gold);
+            font-weight: 500;
+        }
+        .intro-section p {
+            font-size: 20px;
+            color: var(--text);
+            line-height: 1.95;
+            margin-bottom: 30px;
+            font-weight: 300;
+        }
+
+        /* PHILOSOPHY */
+        .philosophy-section {
+            padding: 120px 30px;
+            background: var(--cream);
+        }
+        .philosophy-section.alt {
+            background: var(--white);
+        }
+        .philosophy-section .container {
+            max-width: 900px;
+            margin: 0 auto;
+        }
+        .philosophy-section h2 {
+            font-size: 15px;
+            font-weight: 700;
+            color: var(--navy);
+            letter-spacing: 5px;
+            text-transform: uppercase;
+            margin-bottom: 40px;
+        }
+        .philosophy-section p {
+            font-size: 21px;
+            color: var(--text);
+            line-height: 1.95;
+            margin-bottom: 28px;
+            font-weight: 300;
+        }
+        .philosophy-section .final-lines {
+            font-size: 24px;
+            font-weight: 400;
+            color: var(--navy);
+            line-height: 1.6;
+            margin-top: 45px;
+            padding-left: 30px;
+            border-left: 2px solid var(--gold);
+            font-style: italic;
+        }
+        .philosophy-section .final-lines span { display: block; }
+        .philosophy-section .final-lines span:last-child { color: var(--gold); }
+
+        /* MISSION & VISION */
+        .mission-section {
+            padding: 130px 30px;
+            background: var(--navy);
+            color: #e8ecf2;
+        }
+        .mission-section .container {
+            max-width: 1000px;
+            margin: 0 auto;
+        }
+        .mission-section .big-title {
+            font-size: 48px;
+            font-weight: 300;
+            color: #fff;
+            line-height: 1.15;
+            letter-spacing: -1px;
+            margin-bottom: 15px;
+        }
+        .mission-section .big-title span { color: var(--gold-soft); }
+        .mission-section .subtitle {
+            font-size: 15px;
+            color: #8fa0b8;
+            letter-spacing: 3px;
+            text-transform: uppercase;
+            margin-bottom: 35px;
+            font-weight: 400;
+        }
+        .mission-section p {
+            font-size: 19px;
+            color: #d3dae5;
+            line-height: 1.95;
+            margin-bottom: 25px;
+            font-weight: 300;
+        }
+        .mission-section .divider {
+            height: 1px;
+            background: rgba(184, 148, 74, 0.3);
+            margin: 70px 0;
+        }
+
+        /* VALUES */
+        .values-section {
+            padding: 130px 30px;
+            background: var(--white);
+        }
+        .values-section .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        .values-section h2 {
+            font-size: 40px;
+            font-weight: 300;
+            color: var(--navy);
+            letter-spacing: -0.5px;
+            margin-bottom: 60px;
+        }
+        .values-section h2 span { color: var(--gold); font-weight: 500; }
+
+        .values-layout {
+            display: grid;
+            grid-template-columns: 1fr 1.2fr;
+            gap: 70px;
+            align-items: center;
+        }
+
+        .values-image-wrap { position: relative; }
+        .values-image-wrap img {
+            width: 100%;
+            height: auto;
+            max-height: 620px;
+            object-fit: cover;
+            border-radius: 4px;
+            box-shadow: 0 20px 60px rgba(10, 26, 51, 0.15);
+            display: block;
+        }
+        .values-image-wrap::before {
+            content: '';
+            position: absolute;
+            bottom: -20px;
+            right: -20px;
+            width: 100%;
+            height: 100%;
+            border: 2px solid var(--gold);
+            border-radius: 4px;
+            z-index: -1;
+        }
+
+        .value-item {
+            margin-bottom: 42px;
+            opacity: 0;
+            transform: translateY(40px);
+            transition: all 0.8s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+        }
+        .value-item.in-view {
+            opacity: 1;
+            transform: translateY(0);
+        }
+        .value-item:last-child { margin-bottom: 0; }
+        .value-item h4 {
+            font-size: 14px;
+            font-weight: 700;
+            color: var(--navy);
+            letter-spacing: 4px;
+            text-transform: uppercase;
+            margin-bottom: 14px;
+            padding-bottom: 10px;
+            border-bottom: 1px solid #e5e0d4;
+        }
+        .value-item p {
+            font-size: 18px;
+            color: var(--text);
+            line-height: 1.9;
+            margin: 0;
+            font-weight: 300;
+        }
+
+        /* ============================================================
+           HISTORY — SCROLL-ACTIVATED TIMELINE
+           ============================================================ */
+        .history-section {
+            padding: 130px 30px;
+            background: var(--navy-deep);
+            color: #e8ecf2;
+            position: relative;
+        }
+        .history-section .container {
+            max-width: 1100px;
+            margin: 0 auto;
+        }
+        .history-section h2 {
+            font-size: 40px;
+            font-weight: 300;
+            color: #fff;
+            letter-spacing: -0.5px;
+            margin-bottom: 90px;
+            text-align: center;
+        }
+        .history-section h2 span { color: var(--gold-soft); font-weight: 500; }
+
+        .timeline {
+            position: relative;
+            padding-left: 20px;
+        }
+
+        /* vertical line */
+        .timeline::before {
+            content: '';
+            position: absolute;
+            left: 34px;
+            top: 10px;
+            bottom: 10px;
+            width: 2px;
+            background: rgba(184, 148, 74, 0.2);
+            z-index: 0;
+        }
+
+        .timeline-item {
+            position: relative;
+            display: flex;
+            gap: 40px;
+            margin-bottom: 70px;
+            padding-left: 20px;
+            z-index: 1;
+        }
+        .timeline-item:last-child { margin-bottom: 0; }
+
+        /* year bubble */
+        .timeline-item .year-bubble {
+            flex-shrink: 0;
+            width: 90px;
+            height: 90px;
+            border-radius: 50%;
+            background: rgba(184, 148, 74, 0.12);
+            border: 2px solid rgba(184, 148, 74, 0.3);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 16px;
+            font-weight: 700;
+            color: var(--gold-soft);
+            letter-spacing: 1px;
+            transition: all 0.6s ease;
+        }
+
+        .timeline-item .timeline-text {
+            padding-top: 15px;
+            opacity: 0.4;
+            transform: translateX(-20px);
+            transition: all 0.7s ease;
+        }
+        .timeline-item .timeline-text h3 {
+            font-size: 24px;
+            font-weight: 500;
+            color: rgba(255, 255, 255, 0.4);
+            margin-bottom: 10px;
+            letter-spacing: -0.3px;
+            transition: color 0.6s ease;
+        }
+        .timeline-item .timeline-text p {
+            font-size: 17px;
+            color: rgba(200, 209, 224, 0.4);
+            line-height: 1.85;
+            font-weight: 300;
+            transition: color 0.6s ease;
+        }
+
+        /* ACTIVE STATE — when scrolled into view */
+        .timeline-item.in-view .year-bubble {
+            background: var(--gold);
+            border-color: var(--gold);
+            color: var(--navy-deep);
+            box-shadow: 0 0 0 8px rgba(184, 148, 74, 0.15), 0 0 30px rgba(184, 148, 74, 0.4);
+        }
+        .timeline-item.in-view .timeline-text {
+            opacity: 1;
+            transform: translateX(0);
+        }
+        .timeline-item.in-view .timeline-text h3 {
+            color: #fff;
+        }
+        .timeline-item.in-view .timeline-text p {
+            color: #b8c1d1;
+        }
+
+        /* LEADERSHIP */
+        .leadership-section {
+            padding: 130px 30px;
+            background: var(--cream);
+        }
+        .leadership-section .container {
+            max-width: 1100px;
+            margin: 0 auto;
+        }
+        .leadership-section h2 {
+            font-size: 40px;
+            font-weight: 300;
+            color: var(--navy);
+            letter-spacing: -0.5px;
+            margin-bottom: 70px;
+            text-align: center;
+        }
+        .leadership-section h2 span { color: var(--gold); font-weight: 500; }
+
+        .leader-card {
+            display: grid;
+            grid-template-columns: 380px 1fr;
+            gap: 60px;
+            background: #fff;
+            border-radius: 4px;
+            padding: 50px;
+            box-shadow: 0 5px 30px rgba(10, 26, 51, 0.05);
+            align-items: center;
+        }
+
+        .leader-photo {
+            width: 100%;
+            aspect-ratio: 1;
+            overflow: hidden;
+            border-radius: 4px;
+            box-shadow: 0 15px 50px rgba(10, 26, 51, 0.15);
+        }
+        .leader-photo img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            display: block;
+        }
+
+        .leader-info .small-label {
+            font-size: 12px;
+            letter-spacing: 4px;
+            color: var(--gold);
+            text-transform: uppercase;
+            font-weight: 600;
+            margin-bottom: 10px;
+        }
+        .leader-info h3 {
+            font-size: 28px;
+            font-weight: 400;
+            color: var(--navy);
+            letter-spacing: -0.5px;
+            margin-bottom: 22px;
+        }
+        .leader-info p {
+            font-size: 17px;
+            color: var(--text);
+            line-height: 1.9;
+            margin-bottom: 16px;
+            font-weight: 300;
+        }
+
+        /* FINAL CTA */
+        .final-cta {
+            padding: 140px 30px;
+            background: var(--navy);
+            text-align: center;
+        }
+        .final-cta .container {
+            max-width: 900px;
+            margin: 0 auto;
+        }
+        .final-cta h2 {
+            font-size: 62px;
+            font-weight: 300;
+            color: #fff;
+            line-height: 1.1;
+            letter-spacing: -1.5px;
+            margin-bottom: 35px;
+        }
+        .final-cta h2 span {
+            color: var(--gold-soft);
+            display: block;
+            font-weight: 500;
+        }
+        .final-cta p {
+            font-size: 20px;
+            color: #b8c1d1;
+            line-height: 1.7;
+            max-width: 620px;
+            margin: 0 auto 50px;
+            font-weight: 300;
+        }
+        .final-cta .btn-cta {
+            display: inline-flex;
+            align-items: center;
+            gap: 14px;
+            background: transparent;
+            color: var(--gold-soft);
+            padding: 18px 48px;
+            border: 1px solid var(--gold-soft);
+            font-size: 13px;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 4px;
+            cursor: pointer;
+            transition: all 0.4s;
+            text-decoration: none;
+        }
+        .final-cta .btn-cta:hover {
+            background: var(--gold-soft);
+            color: var(--navy);
+        }
+        .final-cta .btn-cta i {
+            font-size: 13px;
+            transition: transform 0.3s;
+        }
+        .final-cta .btn-cta:hover i { transform: translateX(6px); }
+
+        /* FOOTER */
+        .footer {
+            background: #04080f;
+            color: #fff;
+            padding: 45px 0 30px;
+            text-align: center;
+            border-top: 1px solid rgba(184, 148, 74, 0.15);
+        }
+        .footer .footer-info {
+            color: #7a8699;
+            font-size: 14px;
+            line-height: 1.9;
+            margin-bottom: 12px;
+            font-weight: 300;
+        }
+        .footer .footer-info strong { color: #c8d1e0; font-weight: 500; }
+        .footer .footer-info a {
+            color: #8fa0b8;
+            text-decoration: none;
+            transition: color 0.3s;
+        }
+        .footer .footer-info a:hover { color: var(--gold-soft); }
+        .footer p { color: #566175; font-size: 12px; letter-spacing: 1px; }
+
+        /* SCROLL REVEAL */
+        .reveal {
+            opacity: 0;
+            transform: translateY(50px);
+            transition: opacity 1s ease, transform 1s ease;
+        }
+        .reveal.in-view {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* RESPONSIVE */
+        @media (max-width: 1024px) {
+            .values-layout {
+                grid-template-columns: 1fr;
+                gap: 50px;
+            }
+            .values-image-wrap {
+                max-width: 500px;
+                margin: 0 auto;
+            }
+            .values-image-wrap::before { display: none; }
+            .leader-card {
+                grid-template-columns: 300px 1fr;
+                gap: 40px;
+                padding: 40px;
+            }
+        }
+
+        @media (max-width: 968px) {
+            .about-hero h1 { font-size: 54px; }
+            .intro-section h1 { font-size: 46px; }
+            .mission-section .big-title { font-size: 36px; }
+            .values-section h2,
+            .history-section h2,
+            .leadership-section h2 { font-size: 30px; }
+            .final-cta h2 { font-size: 44px; }
+            .final-cta p { font-size: 18px; }
+        }
+
+        @media (max-width: 768px) {
+            .nav-menu { flex-wrap: wrap; justify-content: center; gap: 8px; }
+            .nav-container { flex-direction: column; gap: 10px; }
+
+            .about-hero { min-height: 75vh; background-attachment: scroll; }
+            .about-hero h1 { font-size: 38px; }
+            .about-hero .tagline-big { font-size: 16px; }
+
+            .intro-section,
+            .philosophy-section,
+            .mission-section,
+            .values-section,
+            .history-section,
+            .leadership-section,
+            .final-cta { padding: 80px 25px; }
+
+            .intro-section h1 { font-size: 34px; }
+            .philosophy-section h2 { font-size: 13px; letter-spacing: 3px; }
+            .philosophy-section p,
+            .mission-section p,
+            .value-item p { font-size: 17px; }
+            .philosophy-section .final-lines { font-size: 20px; }
+
+            .timeline { padding-left: 0; }
+            .timeline::before { left: 24px; }
+            .timeline-item { gap: 20px; padding-left: 10px; }
+            .timeline-item .year-bubble { width: 60px; height: 60px; font-size: 13px; }
+            .timeline-item .timeline-text h3 { font-size: 20px; }
+            .timeline-item .timeline-text p { font-size: 15px; }
+
+            .mission-section .big-title { font-size: 30px; }
+
+            .leader-card {
+                grid-template-columns: 1fr;
+                padding: 30px;
+                gap: 30px;
+            }
+            .leader-photo {
+                max-width: 280px;
+                margin: 0 auto;
+            }
+
+            .final-cta h2 { font-size: 32px; }
+            .final-cta p { font-size: 16px; }
+            .final-cta .btn-cta { padding: 15px 32px; font-size: 12px; letter-spacing: 3px; }
+        }
+
+        @media (max-width: 480px) {
+            .about-hero h1 { font-size: 32px; }
+            .about-hero .eyebrow { font-size: 10px; letter-spacing: 3px; }
+            .about-hero .eyebrow::before,
+            .about-hero .eyebrow::after { width: 25px; }
+
+            .intro-section h1 { font-size: 28px; }
+
+            .values-section h2,
+            .history-section h2,
+            .leadership-section h2 { font-size: 24px; }
+
+            .final-cta h2 { font-size: 26px; }
+        }
+    </style>
+    <link rel="stylesheet" href="/css/dynasty-fx.css" />
+</head>
+<body>
+
+    <!-- NAVBAR -->
+    <nav class="navbar">
+        <div class="nav-container">
+            <div class="nav-logo">
+                <img src="/images/logo.png" alt="Dynasty FC Logo" />
+                <div class="brand-text">
+                    <span class="club-name">Dynasty <span>FC</span></span>
+                    <span class="tagline">Integrated System</span>
+                </div>
+            </div>
+            <ul class="nav-menu">
+                <li><a href="/">Home</a></li>
+                <li><a href="/about" class="active">About</a></li>
+                <li><a href="/teams">Teams</a></li>
+                <li><a href="/fixtures">Fixtures</a></li>
+                <li><a href="/news-updates">News &amp; Updates</a></li>
+                <li><a href="/gallery">Gallery</a></li>
+                <li><a href="/contact">Contact</a></li>
+                <li><a href="/get-involved">Get Involved</a></li>
+                <li><a href="/dashboard">Dashboard</a></li>
+                <li><a href="/login">Login</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <!-- HERO -->
+    <section class="about-hero">
+        <div class="hero-inner">
+            <span class="eyebrow">About Us</span>
+            <h1>About <span>Dynasty FC</span></h1>
+            <p class="tagline-big">
+                A youth development institution using football to develop disciplined,
+                educated and purpose-driven young people.
+            </p>
+        </div>
+        <a href="#intro" class="scroll-down"><i class="fas fa-chevron-down"></i></a>
+    </section>
+
+    <!-- INTRO -->
+    <section class="intro-section" id="intro">
+        <div class="container reveal">
+            <h1>Dynasty <span>Football Club</span></h1>
+            <p>
+                Dynasty Football Club is a youth development institution that uses
+                football as a vehicle to develop disciplined, educated and
+                purpose-driven young people.
+            </p>
+            <p>
+                Founded in Johannesburg in 2016, the club has spent years building a
+                model that shapes young South Africans not only into skilled
+                footballers, but into individuals of character, integrity and ambition.
+            </p>
+            <p>
+                Our structured player development system is built on consistency,
+                accountability and long-term growth rather than short-term results.
+                We prioritise clear progression, high standards and an environment
+                where players are developed not just placed.
+            </p>
+        </div>
+    </section>
+
+    <!-- PHILOSOPHY -->
+    <section class="philosophy-section">
+        <div class="container reveal">
+            <h2>Our Philosophy</h2>
+            <p>
+                At Dynasty FC, we believe that football is a powerful teacher. On the
+                pitch, young people learn discipline, resilience, decision-making and
+                how to perform under pressure.
+            </p>
+            <p>
+                Off the pitch, those same qualities shape how they approach their
+                studies, their relationships and their futures. Our philosophy is
+                simple: develop the whole person.
+            </p>
+
+            <div class="final-lines">
+                <span>Football is the vehicle.</span>
+                <span>Purpose is the destination.</span>
+            </div>
+        </div>
+    </section>
+
+    <!-- OBJECTIVE -->
+    <section class="philosophy-section alt">
+        <div class="container reveal">
+            <h2>Our Objective</h2>
+            <p>
+                Our objective is to develop complete players and complete people. On
+                the pitch, we develop footballers who can read the game, perform under
+                pressure, and play with confidence. Off the pitch, we develop
+                individuals who can navigate life with purpose and a strong foundation
+                of values.
+            </p>
+            <p>
+                We aim to provide a platform for aspiring footballers to develop their
+                skills, knowledge, and character, enabling them to reach their full
+                potential on and off the field.
+            </p>
+
+            <div class="final-lines">
+                <span>Winning is not the ultimate goal.</span>
+                <span>Growth is.</span>
+            </div>
+        </div>
+    </section>
+
+    <!-- MISSION & VISION -->
+    <section class="mission-section">
+        <div class="container reveal">
+            <h1 class="big-title">Our <span>Mission</span></h1>
+            <p class="subtitle">Who we are and what we do</p>
+            <p>
+                Dynasty Football Club is committed to becoming a force in youth
+                development and coaching in South Africa. Our foundation provides our
+                players and coaches with personal attention and excellence. We also
+                empower community-based projects by assisting them with coaching and
+                development.
+            </p>
+            <p>
+                We aim to provide a platform for aspiring footballers to develop their
+                skills, knowledge, and character, enabling them to reach their full
+                potential on and off the field.
+            </p>
+
+            <div class="divider"></div>
+
+            <h1 class="big-title">Our <span>Vision</span></h1>
+            <p class="subtitle">What we aspire to be</p>
+            <p>
+                To be one of South Africa's leading youth development institutions,
+                using football as a platform to produce not only talented players, but
+                disciplined, educated and purpose-driven young people who make a
+                lasting impact in their communities and on the world stage.
+            </p>
+        </div>
+    </section>
+
+    <!-- VALUES -->
+    <section class="values-section">
+        <div class="container">
+            <h2 class="reveal">Our Core <span>Values</span></h2>
+
+            <div class="values-layout">
+
+                <div class="values-image-wrap reveal">
+                    <img src="/images/our-values.png" alt="Dynasty FC Core Values" />
+                </div>
+
+                <div class="values-list">
+                    <div class="value-item">
+                        <h4>Honour</h4>
+                        <p>Acting with integrity, respect, and fairness both on and off the field.</p>
+                    </div>
+                    <div class="value-item">
+                        <h4>Family</h4>
+                        <p>Building a supportive community where every player, coach, and supporter belongs.</p>
+                    </div>
+                    <div class="value-item">
+                        <h4>Positivity</h4>
+                        <p>Maintaining a winning mindset even in the face of setbacks.</p>
+                    </div>
+                    <div class="value-item">
+                        <h4>Excellence</h4>
+                        <p>Striving for greatness in every training session, every match, every moment.</p>
+                    </div>
+                    <div class="value-item">
+                        <h4>Growth</h4>
+                        <p>Continuous learning, development, and self-improvement on the pitch and in life.</p>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </section>
+
+    <!-- HISTORY — SCROLL-ACTIVATED TIMELINE -->
+    <section class="history-section">
+        <div class="container">
+            <h2 class="reveal">History of the <span>Club</span></h2>
+
+            <div class="timeline">
+                <div class="timeline-item">
+                    <div class="year-bubble">2016</div>
+                    <div class="timeline-text">
+                        <h3>2016</h3>
+                        <p>
+                            Dynasty Football Club is born in Johannesburg with a vision to
+                            unite diverse communities through sport. The first intake of boys
+                            was drawn from communities within driving distance.
+                        </p>
+                    </div>
+                </div>
+
+                <div class="timeline-item">
+                    <div class="year-bubble">2017</div>
+                    <div class="timeline-text">
+                        <h3>2017</h3>
+                        <p>
+                            The club achieves official NPO status, standardising operations
+                            and establishing solid roots within local community structures.
+                        </p>
+                    </div>
+                </div>
+
+                <div class="timeline-item">
+                    <div class="year-bubble">2021</div>
+                    <div class="timeline-text">
+                        <h3>2021</h3>
+                        <p>
+                            Branching out to include dedicated youth development squads
+                            across Under 10 and Under 15 age groups.
+                        </p>
+                    </div>
+                </div>
+
+                <div class="timeline-item">
+                    <div class="year-bubble">2024</div>
+                    <div class="timeline-text">
+                        <h3>2024</h3>
+                        <p>
+                            Launch of a highly competitive women's football division, the
+                            Diamond Divas, expanding our impact and reach across Gauteng.
+                        </p>
+                    </div>
+                </div>
+
+                <div class="timeline-item">
+                    <div class="year-bubble">2025</div>
+                    <div class="timeline-text">
+                        <h3>2025</h3>
+                        <p>
+                            Cementing our place in SAFA regional frameworks, hosting
+                            wide-scale trials and serving as a launchpad for elite young
+                            talent in Gauteng.
+                        </p>
+                    </div>
+                </div>
+
+                <div class="timeline-item">
+                    <div class="year-bubble">2026</div>
+                    <div class="timeline-text">
+                        <h3>2026</h3>
+                        <p>
+                            Dynasty FC continues to grow as a regional force, with over 44
+                            registered players across four competitive teams and a growing
+                            community of supporters.
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- LEADERSHIP -->
+    <section class="leadership-section">
+        <div class="container">
+            <h2 class="reveal">Meet Our <span>Leadership</span> Team</h2>
+
+            <div class="leader-card">
+                <div class="leader-photo">
+                    <img src="/images/journey.png" alt="Dynasty FC Journey" />
+                </div>
+
+                <div class="leader-info">
+                    <div class="small-label">Founder and Director</div>
+                    <h3>Dynasty FC Leadership</h3>
+                    <p>
+                        Our leadership team brings decades of combined experience in
+                        youth football, community development, and sports management.
+                        Together, they guide the strategic direction of the club and
+                        ensure every player receives the mentorship and support they
+                        need to thrive.
+                    </p>
+                    <p>
+                        From the coaching staff to the club's administrative backbone,
+                        the Dynasty FC team is driven by a shared commitment to
+                        developing young champions on and off the pitch.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- FINAL CTA -->
+    <section class="final-cta">
+        <div class="container reveal">
+            <h2>Every Player <span>Matters.</span></h2>
+            <p>Support Dynasty FC and help shape the next generation of champions, on and off the pitch.</p>
+            <a href="/get-involved" class="btn-cta">
+                Get Involved <i class="fas fa-arrow-right"></i>
+            </a>
+        </div>
+    </section>
+
+    <!-- FOOTER -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-info">
+                <strong>Fiat Grounds, Soweto</strong> • Johannesburg, South Africa<br />
+                <a href="tel:+27639111277">+27 63 911 1277</a> •
+                <a href="mailto:dynastyfcadmin@gmail.com">dynastyfcadmin@gmail.com</a> •
+                <a href="https://www.instagram.com/dynastyfc_2016" target="_blank">Instagram</a>
+            </div>
+            <p>&copy; 2026 Dynasty Football Club. All rights reserved.</p>
+        </div>
+    </footer>
+
+    <script>
+        // ============================================================
+        // SCROLL REVEAL
+        // ============================================================
+        document.addEventListener('DOMContentLoaded', function() {
+            const revealEls = document.querySelectorAll('.reveal');
+            const valueItems = document.querySelectorAll('.value-item');
+            const timelineItems = document.querySelectorAll('.timeline-item');
+
+            const opts = { threshold: 0.15, rootMargin: '0px 0px -80px 0px' };
+
+            const revealObserver = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.classList.add('in-view');
+                        revealObserver.unobserve(entry.target);
+                    }
+                });
+            }, opts);
+            revealEls.forEach(el => revealObserver.observe(el));
+
+            const valueObserver = new IntersectionObserver((entries) => {
+                entries.forEach((entry, index) => {
+                    if (entry.isIntersecting) {
+                        setTimeout(() => entry.target.classList.add('in-view'), index * 150);
+                        valueObserver.unobserve(entry.target);
+                    }
+                });
+            }, opts);
+            valueItems.forEach(el => valueObserver.observe(el));
+
+            // Timeline: highlight each year as it scrolls into view
+            const timelineObserver = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.classList.add('in-view');
+                    }
+                });
+            }, { threshold: 0.35, rootMargin: '0px 0px -100px 0px' });
+            timelineItems.forEach(el => timelineObserver.observe(el));
+        });
+    </script>
+
+    <script src="/js/dynasty-fx.js" defer></script>
+    <script src="/js/assistant-widget.js" defer></script>
+</body>
+</html>

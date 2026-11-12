@@ -1,0 +1,695 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <title>Get Involved - Dynasty FC</title>
+    <link rel="stylesheet" href="/css/style.css" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: #0a1a33;
+        }
+
+        .navbar {
+            background: rgba(6, 15, 31, 0.95);
+            backdrop-filter: blur(10px);
+            padding: 15px 0;
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.4);
+        }
+        .nav-container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 30px;
+        }
+        .nav-logo { display: flex; align-items: center; gap: 10px; }
+        .nav-logo img { height: 42px; }
+        .nav-logo .brand-text .club-name {
+            font-size: 18px;
+            font-weight: 700;
+            color: #fff;
+        }
+        .nav-logo .brand-text .club-name span { color: #b8944a; }
+        .nav-logo .brand-text .tagline {
+            font-size: 10px;
+            color: #888;
+            letter-spacing: 3px;
+            text-transform: uppercase;
+        }
+        .nav-menu {
+            list-style: none;
+            display: flex;
+            gap: 22px;
+            align-items: center;
+        }
+        .nav-menu a {
+            color: #ccc;
+            font-size: 14px;
+            font-weight: 500;
+            transition: color 0.3s;
+            padding: 5px 8px;
+            text-decoration: none;
+        }
+        .nav-menu a:hover { color: #d4af6a; }
+        .nav-menu .active { color: #d4af6a; }
+
+        .involved-hero {
+            position: relative;
+            min-height: 92vh;
+            background-image: url('/images/involved-hero.png');
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+            display: flex;
+            align-items: center;
+            overflow: hidden;
+        }
+
+        .involved-hero::before {
+            content: '';
+            position: absolute;
+            top: 0; left: 0; right: 0; bottom: 0;
+            background: linear-gradient(
+                90deg,
+                rgba(6, 15, 31, 0.95) 0%,
+                rgba(6, 15, 31, 0.85) 35%,
+                rgba(6, 15, 31, 0.55) 60%,
+                rgba(6, 15, 31, 0.35) 100%
+            );
+            z-index: 1;
+        }
+
+        .involved-hero .hero-inner {
+            position: relative;
+            z-index: 2;
+            max-width: 1200px;
+            width: 100%;
+            margin: 0 auto;
+            padding: 0 60px;
+            display: flex;
+            align-items: center;
+        }
+
+        .involved-hero .hero-text { max-width: 620px; }
+
+        .involved-hero .eyebrow {
+            display: inline-flex;
+            align-items: center;
+            gap: 14px;
+            font-size: 13px;
+            letter-spacing: 5px;
+            color: #d4af6a;
+            font-weight: 700;
+            text-transform: uppercase;
+            margin-bottom: 30px;
+        }
+        .involved-hero .eyebrow::after {
+            content: '';
+            width: 45px;
+            height: 2px;
+            background: #d4af6a;
+        }
+
+        .involved-hero h1 {
+            font-size: 66px;
+            font-weight: 900;
+            color: #fff;
+            line-height: 1.08;
+            letter-spacing: -1px;
+            margin-bottom: 28px;
+        }
+        .involved-hero h1 span { color: #d4af6a; }
+
+        .involved-hero p {
+            font-size: 19px;
+            color: #d1d5db;
+            line-height: 1.75;
+            margin-bottom: 40px;
+            max-width: 560px;
+            font-weight: 400;
+        }
+
+        .hero-cta {
+            display: inline-flex;
+            align-items: center;
+            gap: 14px;
+            background: #b8944a;
+            color: #0a1a33;
+            padding: 18px 45px;
+            border-radius: 40px;
+            font-size: 15px;
+            font-weight: 800;
+            text-transform: uppercase;
+            letter-spacing: 2.5px;
+            cursor: pointer;
+            transition: all 0.3s;
+            border: none;
+            box-shadow: 0 10px 35px rgba(184, 148, 74, 0.35);
+        }
+        .hero-cta:hover {
+            background: #d4af6a;
+            transform: translateY(-3px);
+            box-shadow: 0 18px 50px rgba(184, 148, 74, 0.5);
+        }
+        .hero-cta i {
+            font-size: 16px;
+            transition: transform 0.3s;
+        }
+        .hero-cta:hover i {
+            transform: translateX(4px);
+        }
+
+        .why-section {
+            background: #f8f9fc;
+            padding: 90px 20px;
+        }
+        .why-section .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .section-title {
+            text-align: center;
+            margin-bottom: 55px;
+        }
+        .section-title h2 {
+            font-size: 42px;
+            font-weight: 900;
+            color: #0a1a33;
+            margin-bottom: 14px;
+            letter-spacing: -0.5px;
+        }
+        .section-title h2 span { color: #b8944a; }
+        .section-title p {
+            font-size: 17px;
+            color: #666;
+            max-width: 640px;
+            margin: 0 auto;
+            line-height: 1.7;
+        }
+
+        .benefits-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(230px, 1fr));
+            gap: 22px;
+        }
+        .benefit-card {
+            background: #fff;
+            padding: 38px 26px;
+            border-radius: 16px;
+            text-align: center;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.06);
+            transition: all 0.3s;
+            border-top: 5px solid #b8944a;
+        }
+        .benefit-card:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 15px 40px rgba(0,0,0,0.12);
+        }
+        .benefit-card .benefit-icon {
+            width: 72px;
+            height: 72px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #b8944a, #d4af6a);
+            color: #0a1a33;
+            font-size: 28px;
+            line-height: 72px;
+            margin: 0 auto 20px;
+            box-shadow: 0 8px 25px rgba(184,148,74,0.35);
+        }
+        .benefit-card h4 {
+            font-size: 18px;
+            color: #0a1a33;
+            font-weight: 800;
+            margin-bottom: 10px;
+        }
+        .benefit-card p {
+            font-size: 14px;
+            color: #666;
+            line-height: 1.6;
+            margin: 0;
+        }
+
+        .modal-backdrop {
+            display: none;
+            position: fixed;
+            top: 0; left: 0;
+            width: 100%; height: 100%;
+            background: rgba(6, 15, 31, 0.9);
+            backdrop-filter: blur(8px);
+            z-index: 9999;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+            overflow-y: auto;
+        }
+        .modal-backdrop.active { display: flex; }
+
+        .volunteer-modal {
+            background: #fff;
+            border-radius: 20px;
+            padding: 45px 40px 35px;
+            max-width: 550px;
+            width: 100%;
+            box-shadow: 0 40px 100px rgba(0,0,0,0.5);
+            border-top: 6px solid #b8944a;
+            position: relative;
+            animation: modalSlideUp 0.4s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+            max-height: 92vh;
+            overflow-y: auto;
+        }
+        @keyframes modalSlideUp {
+            from { opacity: 0; transform: translateY(30px) scale(0.95); }
+            to { opacity: 1; transform: translateY(0) scale(1); }
+        }
+        .volunteer-modal .close-modal {
+            position: absolute;
+            top: 18px;
+            right: 22px;
+            font-size: 30px;
+            color: #bbb;
+            cursor: pointer;
+            background: none;
+            border: none;
+            line-height: 1;
+            transition: color 0.3s;
+        }
+        .volunteer-modal .close-modal:hover { color: #dc3545; }
+
+        .volunteer-modal .modal-header {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+        .volunteer-modal .modal-header .icon-circle {
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #b8944a, #d4af6a);
+            color: #0a1a33;
+            font-size: 34px;
+            line-height: 80px;
+            margin: 0 auto 18px;
+            box-shadow: 0 12px 35px rgba(184,148,74,0.4);
+        }
+        .volunteer-modal .modal-header h2 {
+            font-size: 26px;
+            color: #0a1a33;
+            font-weight: 800;
+            margin-bottom: 6px;
+        }
+        .volunteer-modal .modal-header p {
+            color: #888;
+            font-size: 15px;
+            margin: 0;
+        }
+
+        .volunteer-modal label {
+            display: block;
+            font-size: 13px;
+            font-weight: 700;
+            color: #0a1a33;
+            margin-bottom: 6px;
+            margin-top: 16px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+        .volunteer-modal label:first-of-type { margin-top: 0; }
+
+        .volunteer-modal input,
+        .volunteer-modal select,
+        .volunteer-modal textarea {
+            width: 100%;
+            padding: 13px 16px;
+            border: 2px solid #e5e7eb;
+            border-radius: 10px;
+            font-size: 15px;
+            font-family: inherit;
+            transition: all 0.3s;
+            background: #fafafa;
+        }
+        .volunteer-modal input:focus,
+        .volunteer-modal select:focus,
+        .volunteer-modal textarea:focus {
+            border-color: #b8944a;
+            outline: none;
+            background: #fff;
+        }
+        .volunteer-modal textarea {
+            resize: vertical;
+            min-height: 80px;
+        }
+
+        .volunteer-modal .btn-submit {
+            width: 100%;
+            padding: 16px;
+            background: #0a1a33;
+            color: #fff;
+            border: none;
+            border-radius: 12px;
+            font-weight: 800;
+            font-size: 16px;
+            cursor: pointer;
+            transition: all 0.3s;
+            margin-top: 25px;
+            text-transform: uppercase;
+            letter-spacing: 1.5px;
+        }
+        .volunteer-modal .btn-submit:hover:not(:disabled) {
+            background: #b8944a;
+            color: #0a1a33;
+            transform: translateY(-2px);
+            box-shadow: 0 10px 30px rgba(184,148,74,0.4);
+        }
+        .volunteer-modal .btn-submit:disabled {
+            background: #ccc;
+            cursor: not-allowed;
+        }
+
+        .volunteer-modal .form-message {
+            padding: 12px;
+            border-radius: 10px;
+            font-size: 14px;
+            margin-bottom: 16px;
+            display: none;
+            text-align: center;
+        }
+        .volunteer-modal .form-message.error {
+            background: #fee2e2;
+            color: #991b1b;
+            display: block;
+        }
+        .volunteer-modal .form-message.success {
+            background: #d1fae5;
+            color: #065f46;
+            display: block;
+        }
+
+        .footer {
+            background: #0a1a33;
+            color: #fff;
+            padding: 35px 0 25px;
+            text-align: center;
+        }
+        .footer .footer-info {
+            color: #888;
+            font-size: 14px;
+            line-height: 1.9;
+            margin-bottom: 12px;
+        }
+        .footer .footer-info strong { color: #fff; }
+        .footer .footer-info a {
+            color: #aaa;
+            text-decoration: none;
+            transition: color 0.3s;
+        }
+        .footer .footer-info a:hover { color: #d4af6a; }
+        .footer p { color: #666; font-size: 13px; }
+
+        @media (max-width: 968px) {
+            .involved-hero { min-height: 80vh; }
+            .involved-hero .hero-inner { padding: 0 40px; }
+            .involved-hero h1 { font-size: 50px; }
+            .involved-hero p { font-size: 17px; }
+        }
+
+        @media (max-width: 768px) {
+            .nav-menu { flex-wrap: wrap; justify-content: center; gap: 8px; }
+            .nav-container { flex-direction: column; gap: 10px; }
+
+            .involved-hero {
+                min-height: 85vh;
+                background-position: 70% center;
+            }
+            .involved-hero::before {
+                background: linear-gradient(
+                    180deg,
+                    rgba(6, 15, 31, 0.7) 0%,
+                    rgba(6, 15, 31, 0.85) 50%,
+                    rgba(6, 15, 31, 0.95) 100%
+                );
+            }
+            .involved-hero .hero-inner { padding: 0 25px; }
+            .involved-hero .hero-text { max-width: 100%; }
+            .involved-hero h1 { font-size: 38px; }
+            .involved-hero p { font-size: 16px; margin-bottom: 30px; }
+            .involved-hero .eyebrow { font-size: 11px; letter-spacing: 3px; }
+            .hero-cta {
+                padding: 15px 32px;
+                font-size: 13px;
+                letter-spacing: 2px;
+            }
+
+            .section-title h2 { font-size: 30px; }
+            .benefits-grid { grid-template-columns: 1fr; }
+            .why-section { padding: 60px 20px; }
+
+            .volunteer-modal { padding: 35px 25px 25px; }
+            .volunteer-modal .modal-header h2 { font-size: 22px; }
+        }
+
+        @media (max-width: 480px) {
+            .involved-hero h1 { font-size: 30px; }
+            .involved-hero p { font-size: 15px; }
+            .hero-cta { padding: 13px 26px; font-size: 12px; }
+            .benefit-card { padding: 28px 20px; }
+        }
+    </style>
+    <link rel="stylesheet" href="/css/dynasty-fx.css" />
+</head>
+<body>
+
+    <nav class="navbar">
+        <div class="nav-container">
+            <div class="nav-logo">
+                <img src="/images/logo.png" alt="Dynasty FC Logo" />
+                <div class="brand-text">
+                    <span class="club-name">Dynasty <span>FC</span></span>
+                    <span class="tagline">Integrated System</span>
+                </div>
+            </div>
+            <ul class="nav-menu">
+                <li><a href="/">Home</a></li>
+                <li><a href="/about">About</a></li>
+                <li><a href="/teams">Teams</a></li>
+                <li><a href="/fixtures">Fixtures</a></li>
+                <li><a href="/news-updates">News &amp; Updates</a></li>
+                <li><a href="/gallery">Gallery</a></li>
+                <li><a href="/contact">Contact</a></li>
+                <li><a href="/get-involved" class="active">Get Involved</a></li>
+                <li><a href="/dashboard">Dashboard</a></li>
+                <li><a href="/login">Login</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <section class="involved-hero">
+        <div class="hero-inner">
+            <div class="hero-text">
+                <span class="eyebrow">Get Involved</span>
+
+                <h1>Make a Difference<br>With <span>Dynasty FC</span></h1>
+
+                <p>
+                    Your time, skills and support can help us create opportunities,
+                    build confidence and develop the next generation of champions.
+                </p>
+
+                <button class="hero-cta" onclick="openVolunteerModal()">
+                    Get Involved <i class="fas fa-arrow-right"></i>
+                </button>
+            </div>
+        </div>
+    </section>
+
+    <section class="why-section">
+        <div class="container">
+
+            <div class="section-title">
+                <h2>Why <span>Volunteer</span> with Dynasty FC?</h2>
+                <p>Be part of something bigger. Every hour you give helps build young champions on and off the pitch.</p>
+            </div>
+
+            <div class="benefits-grid">
+                <div class="benefit-card">
+                    <div class="benefit-icon"><i class="fas fa-futbol"></i></div>
+                    <h4>Make a Difference</h4>
+                    <p>Help develop young champions in your community</p>
+                </div>
+                <div class="benefit-card">
+                    <div class="benefit-icon"><i class="fas fa-graduation-cap"></i></div>
+                    <h4>Gain Experience</h4>
+                    <p>Valuable coaching and management experience</p>
+                </div>
+                <div class="benefit-card">
+                    <div class="benefit-icon"><i class="fas fa-heart"></i></div>
+                    <h4>Be Part of Something</h4>
+                    <p>Join a passionate football community</p>
+                </div>
+                <div class="benefit-card">
+                    <div class="benefit-icon"><i class="fas fa-users"></i></div>
+                    <h4>Build Connections</h4>
+                    <p>Meet new people and make lasting connections</p>
+                </div>
+            </div>
+
+        </div>
+    </section>
+
+    <div class="modal-backdrop" id="volunteerModal">
+        <div class="volunteer-modal">
+            <button class="close-modal" onclick="closeVolunteerModal()">&times;</button>
+
+            <div class="modal-header">
+                <div class="icon-circle"><i class="fas fa-hands-helping"></i></div>
+                <h2>Apply to Volunteer</h2>
+                <p>Fill in your details and we'll get back to you within 48 hours</p>
+            </div>
+
+            <div id="formMessage" class="form-message"></div>
+
+            <form id="volunteerForm" onsubmit="submitVolunteer(event)">
+                <label for="volName">Full Name *</label>
+                <input type="text" id="volName" placeholder="e.g. John Smith" required />
+
+                <label for="volEmail">Email Address *</label>
+                <input type="email" id="volEmail" placeholder="you@example.com" required />
+
+                <label for="volPhone">Phone Number</label>
+                <input type="tel" id="volPhone" placeholder="+27 ..." />
+
+                <label for="volRole">Role *</label>
+                <select id="volRole" required>
+                    <option value="">Select a role...</option>
+                    <option value="Coach">Coach</option>
+                    <option value="Assistant Coach">Assistant Coach</option>
+                    <option value="Team Manager">Team Manager</option>
+                    <option value="Medical Staff">Medical Staff</option>
+                    <option value="Grounds Keeper">Grounds Keeper</option>
+                    <option value="Administrator">Administrator</option>
+                    <option value="Events Coordinator">Events Coordinator</option>
+                    <option value="Fundraising">Fundraising</option>
+                    <option value="Other">Other</option>
+                </select>
+
+                <label for="volAvailability">Availability</label>
+                <select id="volAvailability">
+                    <option value="Weekends">Weekends</option>
+                    <option value="Weekdays">Weekdays</option>
+                    <option value="Evenings">Evenings</option>
+                    <option value="Flexible">Flexible</option>
+                    <option value="As needed">As needed</option>
+                </select>
+
+                <label for="volMessage">Why do you want to volunteer?</label>
+                <textarea id="volMessage" placeholder="Tell us a bit about yourself..."></textarea>
+
+                <button type="submit" class="btn-submit" id="volSubmitBtn">
+                    <i class="fas fa-paper-plane"></i> Submit Application
+                </button>
+            </form>
+        </div>
+    </div>
+
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-info">
+                <strong>Fiat Grounds, Soweto</strong> • Johannesburg, South Africa<br />
+                <a href="tel:+27639111277">+27 63 911 1277</a> •
+                <a href="mailto:dynastyfcadmin@gmail.com">dynastyfcadmin@gmail.com</a> •
+                <a href="https://www.instagram.com/dynastyfc_2016" target="_blank">Instagram</a>
+            </div>
+            <p>&copy; 2026 Dynasty Football Club. All rights reserved.</p>
+        </div>
+    </footer>
+
+    <script>
+        function openVolunteerModal() {
+            document.getElementById('volunteerModal').classList.add('active');
+            document.body.style.overflow = 'hidden';
+        }
+
+        function closeVolunteerModal() {
+            document.getElementById('volunteerModal').classList.remove('active');
+            document.body.style.overflow = '';
+            document.getElementById('formMessage').className = 'form-message';
+        }
+
+        document.addEventListener('keydown', function(e) {
+            if (e.key === 'Escape') closeVolunteerModal();
+        });
+
+        document.getElementById('volunteerModal').addEventListener('click', function(e) {
+            if (e.target.id === 'volunteerModal') closeVolunteerModal();
+        });
+
+        async function submitVolunteer(event) {
+            event.preventDefault();
+
+            const name = document.getElementById('volName').value.trim();
+            const email = document.getElementById('volEmail').value.trim();
+            const phone = document.getElementById('volPhone').value.trim();
+            const role = document.getElementById('volRole').value;
+            const availability = document.getElementById('volAvailability').value;
+            const message = document.getElementById('volMessage').value.trim();
+
+            const msgBox = document.getElementById('formMessage');
+            const btn = document.getElementById('volSubmitBtn');
+
+            msgBox.className = 'form-message';
+
+            if (!name || !email || !role) {
+                msgBox.textContent = 'Please fill in Name, Email, and Role.';
+                msgBox.className = 'form-message error';
+                return;
+            }
+
+            const originalText = btn.innerHTML;
+            btn.disabled = true;
+            btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Submitting...';
+
+            try {
+                const response = await fetch('/api/volunteer', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ name, email, phone, role, availability, message })
+                });
+
+                const data = await response.json();
+
+                if (response.ok && data.success) {
+                    msgBox.textContent = '✅ Thank you, ' + name + '! Your application has been submitted. We will contact you within 48 hours.';
+                    msgBox.className = 'form-message success';
+                    document.getElementById('volunteerForm').reset();
+
+                    setTimeout(() => {
+                        closeVolunteerModal();
+                        msgBox.className = 'form-message';
+                    }, 3500);
+                } else {
+                    msgBox.textContent = '❌ ' + (data.error || 'Something went wrong.');
+                    msgBox.className = 'form-message error';
+                }
+            } catch (err) {
+                msgBox.textContent = '❌ Network error. Please try again.';
+                msgBox.className = 'form-message error';
+                console.error('Error:', err);
+            } finally {
+                btn.disabled = false;
+                btn.innerHTML = originalText;
+            }
+        }
+    </script>
+
+    <script src="/js/dynasty-fx.js" defer></script>
+    <script src="/js/assistant-widget.js" defer></script>
+</body>
+</html>

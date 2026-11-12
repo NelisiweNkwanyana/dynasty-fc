@@ -1,0 +1,28 @@
+.env
+venv/
+__pycache__/
+
+# --- added to keep secrets and junk off GitHub ---
+.DS_Store
+.env
+.env.*
+!.env.example
+*.pem
+*.key
+node_modules/
+venv/
+.venv/
+__pycache__/
+*.pyc
+.pytest_cache/
+dist/
+*.log
+.vscode/
+.idea/
+dynasty_backup*.sql
+*.sql.bak
+private_documents/
+tools/local_demo/*.db
+
+# files people upload through the app (gallery, player photos) never go to GitHub
+frontend/uploads/

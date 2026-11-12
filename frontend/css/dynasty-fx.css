@@ -1,0 +1,99 @@
+/* =====================================================================
+   Dynasty FC — effects layer (dynasty-fx)
+   Sits on top of the existing pages. It never replaces a page's own
+   styles, backgrounds or layout; it only adds depth, light and motion.
+   ===================================================================== */
+
+/* ---- scroll progress ---- */
+.dfx-progress {
+    position: fixed; top: 0; left: 0; right: 0; height: 3px; z-index: 10001;
+    transform-origin: 0 50%; transform: scaleX(0); pointer-events: none;
+    background: linear-gradient(90deg, #8a6a2c, #b8944a 40%, #f0cf86);
+    box-shadow: 0 0 12px rgba(240, 207, 134, .6);
+}
+
+/* ---- particle layers ---- */
+.dfx-layer { position: absolute; inset: 0; width: 100%; height: 100%; pointer-events: none; z-index: 1; }
+.dfx-fixed-layer { position: fixed; inset: 0; width: 100%; height: 100%; pointer-events: none; z-index: 0; }
+.staff-card, .login-container, .register-container { position: relative; z-index: 2; }
+
+/* ---- depth-parallax targets ---- */
+.dfx-depth { will-change: transform; transform-style: preserve-3d; }
+
+/* ---- 3D tilt + glare on cards ---- */
+.dfx-tilting { transition: transform .18s ease-out !important; will-change: transform; }
+.dfx-glare {
+    position: absolute; inset: 0; border-radius: inherit; pointer-events: none; z-index: 5;
+    background: radial-gradient(circle at var(--gx, 50%) var(--gy, 50%), rgba(255, 255, 255, .32), rgba(255, 255, 255, 0) 55%);
+    mix-blend-mode: overlay; opacity: 0; transition: opacity .25s;
+}
+.dfx-tilting > .dfx-glare { opacity: 1; }
+
+/* ---- home crest: 3D tilt, holographic glare, orbiting ball ---- */
+.dfx-crest {
+    position: relative; display: inline-block; transform-style: preserve-3d;
+    animation: dfxCrestIn 1.4s cubic-bezier(.2, .8, .2, 1) backwards;
+}
+.dfx-crest > img { position: relative; z-index: 1; display: block; }
+.dfx-crest .dfx-crest-shine {
+    position: absolute; inset: 0; z-index: 2; pointer-events: none;
+    -webkit-mask-size: contain; mask-size: contain; -webkit-mask-repeat: no-repeat; mask-repeat: no-repeat;
+    -webkit-mask-position: center; mask-position: center;
+    background:
+        radial-gradient(circle at var(--gx, 30%) var(--gy, 20%), rgba(255, 255, 255, .55), transparent 40%),
+        linear-gradient(115deg, transparent 30%, rgba(255, 244, 214, .75) 47%, rgba(255, 255, 255, .0) 60%) no-repeat;
+    background-size: 100% 100%, 260% 100%;
+    background-position: 0 0, var(--sweep, 160%) 0;
+    mix-blend-mode: soft-light;
+}
+.dfx-orbit { position: absolute; left: -30%; top: -22%; width: 160%; height: 144%; pointer-events: none; }
+.dfx-orbit.back { z-index: 0; }
+.dfx-orbit.front { z-index: 3; }
+@keyframes dfxCrestIn {
+    0% { opacity: 0; transform: perspective(900px) rotateY(-110deg) scale(.7); }
+    60% { opacity: 1; }
+    100% { opacity: 1; transform: none; }
+}
+
+/* ---- gallery: kick-up stage ---- */
+.dfx-kick { position: relative; width: 100%; animation: floatHero 6s ease-in-out infinite; transform-style: preserve-3d; }
+.dfx-kick > img { animation: none !important; width: 100%; }
+.dfx-kick canvas.dfx-kick-fx { position: absolute; left: -40%; top: -28%; width: 180%; height: 156%; pointer-events: none; z-index: 3; }
+.dfx-kick.dfx-ready { cursor: pointer; }
+.dfx-kick-hint {
+    position: absolute; left: 50%; bottom: 6%; transform: translateX(-50%); z-index: 4;
+    font: 700 11px/1 inherit; letter-spacing: .18em; text-transform: uppercase; color: #8a6a2c;
+    background: rgba(255, 255, 255, .85); border: 1px solid rgba(184, 148, 74, .35);
+    padding: 7px 12px; border-radius: 999px; white-space: nowrap; pointer-events: none;
+    opacity: 0; transition: opacity .4s;
+}
+.dfx-kick.dfx-ready:hover .dfx-kick-hint { opacity: 1; }
+
+/* ---- teams: stadium floodlights ---- */
+.dfx-flood { position: absolute; inset: 0; pointer-events: none; z-index: 1; overflow: hidden; mix-blend-mode: screen; }
+.dfx-flood .lamp {
+    position: absolute; width: 34vw; height: 34vw; max-width: 520px; max-height: 520px; border-radius: 50%;
+    transform: translate(-50%, -50%);
+    background: radial-gradient(circle, rgba(220, 235, 255, .55) 0%, rgba(160, 200, 255, .18) 30%, transparent 65%);
+    animation: dfxFlicker 7s infinite;
+}
+.dfx-flood .lamp.r { animation-delay: -3.1s; }
+.dfx-flood .beam {
+    position: absolute; width: 70vw; height: 120vh; transform-origin: 50% 0;
+    background: conic-gradient(from 180deg at 50% 0, transparent 0deg, rgba(200, 225, 255, .10) 8deg, rgba(200, 225, 255, .02) 16deg, transparent 22deg);
+    filter: blur(6px);
+}
+.dfx-flood .beam.l { animation: dfxSweepL 11s ease-in-out infinite; }
+.dfx-flood .beam.r { animation: dfxSweepR 13s ease-in-out infinite; }
+@keyframes dfxFlicker { 0%, 100% { opacity: .9; } 45% { opacity: 1; } 47% { opacity: .55; } 49% { opacity: 1; } 70% { opacity: .82; } }
+@keyframes dfxSweepL { 0%, 100% { transform: translateX(-50%) rotate(-38deg); } 50% { transform: translateX(-50%) rotate(-24deg); } }
+@keyframes dfxSweepR { 0%, 100% { transform: translateX(-50%) rotate(38deg); } 50% { transform: translateX(-50%) rotate(24deg); } }
+
+/* ---- staff login: floating 3D balls behind the card ---- */
+.dfx-ballfield { position: fixed; inset: 0; pointer-events: none; z-index: 1; }
+.dfx-ballfield canvas { position: absolute; }
+
+@media (prefers-reduced-motion: reduce) {
+    .dfx-crest, .dfx-kick, .dfx-flood .lamp, .dfx-flood .beam { animation: none !important; }
+    .dfx-tilting { transition: none !important; }
+}
